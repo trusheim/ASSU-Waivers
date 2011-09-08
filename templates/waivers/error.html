@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Fee Waiver Request Error</h1>
+<div class='color-box' style='width:80%; margin: 0 auto;'>
+
+    {% if message == 'notstudent' %}
+    <p class="last">Our data show that you are not currently registered as a student, and are therefore ineligible to receive a fee waiver.</p>
+    {% endif %}
+
+    {% if message == 'nowaiver' %}
+    <p class='last'>You are listed as a member of a group that is not eligible to receive a fee waiver.</p>
+    {% endif %}
+</div>
+{% endblock %}

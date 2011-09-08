@@ -11,38 +11,19 @@
     <link rel="stylesheet" type="text/css" href="https://www.stanford.edu/stanfordmodern/v2/css/mobile.css" media="only screen and (max-width: 640px)" />
     <link rel="stylesheet" type="text/css" href="https://www.stanford.edu/stanfordmodern/v2/css/print.css" media="print" />
     <!--[if IEMobile]>
-<link rel="stylesheet" type="text/css" href="https://www.stanford.edu/stanfordmodern/v2/css/mobile.css" media="screen" />
-<link rel="stylesheet" type="text/css" href="https://www.stanford.edu/stanfordmodern/v2/css/wp7.css" media="screen" />
-<![endif]-->
+    <link rel="stylesheet" type="text/css" href="https://www.stanford.edu/stanfordmodern/v2/css/mobile.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="https://www.stanford.edu/stanfordmodern/v2/css/wp7.css" media="screen" />
+    <![endif]-->
     <script type="text/javascript" src="https://www.stanford.edu/stanfordmodern/v2/js/jquery.min.js"></script>
     <script type="text/javascript" src="https://www.stanford.edu/stanfordmodern/v2/js/stanfordmodern.js"></script>
     <script type="text/javascript" src="https://www.stanford.edu/stanfordmodern/v2/js/jquery.swfobject.js"></script>
     <script type="text/javascript" src="https://www.stanford.edu/stanfordmodern/v2/js/jquery.ceebox-min.js"></script>
+
     <!-- Custom -->
-    <link rel="stylesheet" type="text/css" href="css/custom.css" />
-    <script type="text/javascript" src="js/custom.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}jquery-ui-1.8.16.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}jquery-stanford/jquery-ui-1.8.13.custom.css" media="all" />
 </head>
 <!-- Stanford Modern Templates Version 2.11 -->
-<!-- CSS Instructions: Select a combination of the following body classes e.g. <body class="two-sidebars drawer wide ie6-3col">
-
-[two-sidebars] or [sidebar-left] or [sidebar-right]
-    Create a two or three column layout
-    Affected div(s): #sidebar-left or #sidebar-right
-    
-[nav] or [drawer]
-    Add horizontal navigation or horizontal navigation with expandable drawer (5 item max limit)
-    Affected div(s): #nav, #nav_drawer, #toggle
-    
-[wide]
-    Flexible width layout
-    
-[ie6-3col] or [ie6-2col]
-    Add wide display support for Internet Explorer 6 when used in conjunction with the [wide] body class.
-    Use ie6-3col for the two-sidebars layout.  Use ie6-2col for the sidebar-left or sidebar-right layouts.
-    
-[topic] or [portal]
-    Enable styling for advanced templates such as portal or topic pages.
--->
 <body class="sidebar-left wide ie6-2col">
 <div id="skipnav"><a href="#content">Skip navigation</a></div>
 <!-- Start #layout -->
@@ -61,6 +42,8 @@
 
             </div>
             <!-- End #logo -->
+        
+            {# adding this up top... not really in the normal CSS stylesheet, but hey. #}
             <div class="right-box" style='width:auto;'>
                     {% if user.is_guest %}
                        Not logged in.

@@ -1,4 +1,4 @@
-from assu_waivers.models import Term
+from assu_waivers.models import Term, Student
 
 def GetTermForDate(datetime):
     try:
@@ -7,4 +7,14 @@ def GetTermForDate(datetime):
     except Term.DoesNotExist:
         return None
     except Term.MultipleObjectsReturned:
-        return Exception("Multiple terms overlap on " + str(datetime) + ". Failure.")
+        raise Exception("Multiple terms overlap on " + str(datetime) + ". Failure.")
+
+def GetStudentFromUser(user):
+    sunetid = user.username
+    try:
+        student = Student.objects.get(sunetid=sunetid)
+        return student
+    except Student.DoesNotExist:
+        return None
+    except Student.MultipleObjectsReturned:
+        raise Exception("Multiple students with SUNetID " + sunetid)

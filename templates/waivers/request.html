@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<form action="{% url assu_waivers.views.request %}" method="POST">
+    {% csrf_token %}
+    <table>
+        {% for form in forms %}
+        <tr {% if form.errors %}style="background: red;"{% endif %}>
+            <td>{{ form.fee.name }}</td><td>{{ form.fee.max_amount }}</td>
+            <td>
+                <span class='bold'>$</span><input type="text" name="{{ form.fee.pk }}-waiver_amount"
+                                                  id="{{ form.fee.pk }}-amount" style="border: 0; font-weight:bold;"
+                                                  value="{{ form.waiver_amount.value }}"
+                    />
+            <div id="{{ form.fee.pk }}-slider" style='width:80%;'>$0</div></td>
+        </tr>
+
+        <script type="text/javascript">
+	    $(function() {
+		$( "#{{ form.fee.pk }}-slider" ).slider({
+			value:{{ form.waiver_amount.value }},
+			min: 0,
+			max: {{ form.fee.max_amount }},
+			step: 0.25,
+			slide: function( event, ui ) {
+				$( "#{{ form.fee.pk }}-amount" ).val( ui.value );
+			}
+		});
+		$( "#{{ form.fee.pk }}-amount" ).val( $( "#{{ form.fee.pk }}-slider" ).slider( "value" ) );
+	});
+	</script>
+        {% endfor %}
+    </table>
+    <input type="submit" />
+</form>
+{% endblock %}
