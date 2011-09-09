@@ -1,18 +1,51 @@
 {% extends 'base.html' %}
+{% load currency %}
 {% block content %}
+
+    <h1> Student Activities Fee Waiver Request</h1>
+    <div class='box'><p class="last"><span class="important">Instructions:</span> please select the portions of the Student Activities Fee for which you wish to seek a waiver. For each waiver you seek, you
+    must provide a reason.</p></div>
 <form action="{% url assu_waivers.views.request %}" method="POST">
     {% csrf_token %}
-    <table>
+    <table class = 'gold-header'>
+        <thead>
+            <tr>
+                <th style="padding: 1em;">Fee</th>
+                <th>Amount</th>
+                <th>Your waiver</th>
+                <th>Reason</th>
+            </tr>
         {% for form in forms %}
-        <tr {% if form.errors %}style="background: red;"{% endif %}>
-            <td>{{ form.fee.name }}</td><td>{{ form.fee.max_amount }}</td>
-            <td>
+        <tr>
+        <th {% if form.errors %}class ="ui-state-error"{% else %}class='side-header'{% endif %}>{{ form.fee.name }}</th>
+            <th class='side-header'>{{ form.fee.max_amount|currency}}</th>
+            <td style="vertical-align:middle;">
                 <span class='bold'>$</span><input type="text" name="{{ form.fee.pk }}-waiver_amount"
                                                   id="{{ form.fee.pk }}-amount" style="border: 0; font-weight:bold;"
                                                   value="{{ form.waiver_amount.value }}"
                     />
-            <div id="{{ form.fee.pk }}-slider" style='width:80%;'>$0</div></td>
+            <div id="{{ form.fee.pk }}-slider" style='margin: 0 1em 0.5em 1em;'></div></td>
+            <td width = '40%'>
+                <ul>
+                <li><input type="checkbox" name="{{ form.fee.pk }}-reason_burden" {% if form.reason_burden.value %}checked="CHECKED"{% endif %} />
+                I cannot afford this amount because this student fee will be a significant financial burden.</li>
+                <li><input type="checkbox" name="{{ form.fee.pk }}-reason_morally" {% if form.reason_morally.value %}checked="CHECKED"{% endif %} />
+                I am morally and ethically opposed to this group's mission.</li>
+                <li><input type="checkbox" name="{{ form.fee.pk }}-reason_value" {% if form.reason_value.value %}checked="CHECKED"{% endif %} />
+                I do not find value from this group.</li>
+                <li><input type="checkbox" name="{{ form.fee.pk }}-reason_other" {% if form.reason_other.value %}checked="CHECKED"{% endif %} />
+                Other (please specify)<br />
+                <input type="text" name="{{ form.fee.pk }}-reason_other_expository" value="{{ form.reason_other_expository.value }}" style='width:90%;' /></li>
+                </ul>
+
+            </td>
         </tr>
+
+            {% if form.errors %}
+            <tr>
+            <td colspan = '4' class="ui-state-error" style="padding: 1em;font-weight:bold;">{{ form.non_field_errors }}</td>
+            </tr>
+            {% endif %}
 
         <script type="text/javascript">
 	    $(function() {
@@ -20,16 +53,24 @@
 			value:{{ form.waiver_amount.value }},
 			min: 0,
 			max: {{ form.fee.max_amount }},
-			step: 0.25,
+			step: 0.50,
 			slide: function( event, ui ) {
-				$( "#{{ form.fee.pk }}-amount" ).val( ui.value );
+				$( "#{{ form.fee.pk }}-amount" ).val( $.currency(ui.value) );
 			}
 		});
-		$( "#{{ form.fee.pk }}-amount" ).val( $( "#{{ form.fee.pk }}-slider" ).slider( "value" ) );
+		$( "#{{ form.fee.pk }}-amount" ).val( $.currency($( "#{{ form.fee.pk }}-slider" ).slider( "value" )) );
 	});
 	</script>
         {% endfor %}
     </table>
-    <input type="submit" />
+<br /><br />
+<div class='color-box' style='width:80%;margin:0 auto;'>
+    <h2>Important: Release of name, SUID, and SUNetID</h2>
+    <p>I understand that by obtaining a fee waiver, I may be deprived of some or all of the services offered by the fee-waived student organization.
+        I understand that the student organization's president, financial officer and its other key officers will be given access to my name, SUID number and SUNetID.
+        This information will only be used to determine if I received a refund and thus would be ineligible for access to their group's programs and services.</p>
+
+    <p style="text-align:center"><input type="submit" value="Submit Fee Waiver Request" /></p>
+</div>
 </form>
 {% endblock %}

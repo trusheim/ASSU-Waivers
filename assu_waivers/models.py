@@ -15,7 +15,7 @@ class Term(models.Model):
     short_name = models.SlugField(max_length=6,blank=False, verbose_name="Short name", help_text="e.g. A10-11, W10-11, S10-11 (max 6 letters & numbers, no spaces)")
     long_name = models.CharField(max_length=128, blank=False, verbose_name="Long name", help_text="e.g. Winter 2010-2011")
     refund_opens = models.DateTimeField(blank=False, verbose_name="Date/time this waiver period opens", help_text="8:00 AM on the first day of the quarter")
-    refund_closes = models.DateTimeField(blank=False, verbose_name="Date/time this waiver period closes", help_text="5:00 PM on the third Friday of the quarter")
+    refund_closes = models.DateTimeField(blank=False, verbose_name="Date/time this waiver period closes", help_text="5:00 PM on the second Friday of the quarter")
 
     def __unicode__(self):
         return self.long_name
@@ -33,6 +33,7 @@ class FeeWaiver(models.Model):
     student = models.ForeignKey(Student)
     fee = models.ForeignKey(Fee)
     amount = models.FloatField()
+    reason = models.TextField()
 
     class Meta:
         unique_together = ('student','fee')

@@ -21,6 +21,7 @@
 
     <!-- Custom -->
     <script type="text/javascript" src="{{ MEDIA_URL }}jquery-ui-1.8.16.min.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}jquery.currency.min.js"></script>
     <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}jquery-stanford/jquery-ui-1.8.13.custom.css" media="all" />
 </head>
 <!-- Stanford Modern Templates Version 2.11 -->
@@ -43,7 +44,7 @@
             </div>
             <!-- End #logo -->
         
-            {# adding this up top... not really in the normal CSS stylesheet, but hey. #}
+            {# adding this up top... not really in the normal CSS styles, but hey. #}
             <div class="right-box" style='width:auto;'>
                     {% if user.is_guest %}
                        Not logged in.
@@ -71,8 +72,8 @@
                 <!-- Start #sidebar-left (Removable) -->
                 <div id="sidebar-left" class="sidebar">
                     <ul class="nav">
-                        <li class="current"><a href="#">Student Activities Fee Waiver</a></li>
-                        <li><a href="#">About the Student Activities Fee</a></li>
+                        <li class="current"><a href="{% url assu_waivers.views.index %}">Student Activities Fee Waiver</a></li>
+                        <li><a href="{% url assu_waivers.views.about %}">About the Student Activities Fee</a></li>
                         <li><a href="http://assu.stanford.edu">The ASSU</a></li>
                     </ul>
                 </div>

@@ -17,13 +17,17 @@ def index(request):
         return waiverinfo(request,term)
 
 def closed(request):
-    return render_to_response('waivers/closed.html', {}, context_instance=RequestContext(request))
+    return render_to_response('waivers/closed.html', None, context_instance=RequestContext(request))
 
 def waiverinfo(request, term):
     return render_to_response('waivers/info.html', {'term': term}, context_instance=RequestContext(request))
 
 def error(request,message):
     return render_to_response('waivers/error.html', {'message': message}, context_instance=RequestContext(request))
+
+def about(request):
+    return render_to_response('waivers/about.html', None, context_instance=RequestContext(request))
+
 
 def request(request):
     term = GetTermForDate(datetime.now())
@@ -41,6 +45,6 @@ def request(request):
         forms = WaiverForm.get_list(term,student,data=request.POST)
         if WaiverForm.verify_list(forms):
             WaiverForm.save_list(forms)
-            return render_to_response('waivers/complete.html',{'date': datetime.now()}, context_instance=RequestContext(request))
+            return render_to_response('waivers/complete.html',{'date': datetime.now(), 'term': term}, context_instance=RequestContext(request))
 
     return render_to_response('waivers/request.html',{'forms': forms}, context_instance=RequestContext(request))
