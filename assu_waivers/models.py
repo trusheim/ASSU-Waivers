@@ -27,6 +27,9 @@ class Enrollment(models.Model):
     population = models.IntegerField(choices=POPULATIONS)
     added = models.DateTimeField(auto_now_add=True)
 
+    def __unicode__(self):
+        return "%s (%s)" % (self.student.sunetid, self.term.short_name)
+
 
 class Fee(models.Model):
     name = models.CharField(max_length=128, verbose_name="Fee name",help_text="Group name or general fee name")
