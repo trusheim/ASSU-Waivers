@@ -12,17 +12,8 @@ Group waiver report: {{ term }}
 {% block content %}
     <h2>WAIVER REPORT for {{ fee.name }}, {{ term }}</h2>
     <p style='font-style:italic;'>Current as of: {{ date }} </p>
-    <p><span style='font-weight:bold;'>To the group President, Financial Officer, and other key officers:</span>
-        this document is prepared, pursuant to the
-    ASSU Joint Bylaws, to inform you of the students who have received a fee waiver from your group. You are to use
-    this document only to ensure that students who have received a waiver do not participate in your group's services.
-    </p>
-    <p>This document is private, and you may not share it outside the officers listed on your application in MyGroups.
-    Spreading this document beyond these authorized users may be considered a violation of the Fundamental Standard
-    or Governing Documents of the ASSU, and the student(s) whose privacy rights are infringed may have standing to file
-    a case against you and/or your group in front of the Organizational Conduct Board, Office of Judicial Affairs,
-    and/or ASSU Constitutional Council.</p>
 
+    <p><span style="font-weight:bold;">Fee amount:</span> {{ fee.max_amount|currency }}</p>
     <p><span style="font-weight:bold;">Total amount waived:</span> {{ total_waiver|currency }}</p>
 <table>
 <thead>
@@ -30,7 +21,9 @@ Group waiver report: {{ term }}
     <th>Name</th>
     <th>SUNetID</th>
     <th>SUID #</th>
-    <th>Reason for refunding</th>
+    <th>Amount</th>
+    <th>Last Updated</th>
+    <th>Reason(s)</th>
 </tr>
 </thead>
 <tbody>
@@ -39,6 +32,8 @@ Group waiver report: {{ term }}
     <th>{{ waiver.student.name }}</th>
     <td>{{ waiver.student.sunetid }}</td>
     <td>{{ waiver.student.suid }}</td>
+    <td>{{ waiver.amount|currency }}</td>
+    <td>{{ waiver.updated }}</td>
     <td>{{ waiver.reason }}</td>
     <td></td>
 </tr>

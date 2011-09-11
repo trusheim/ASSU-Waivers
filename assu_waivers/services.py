@@ -18,3 +18,8 @@ def GetStudentFromUser(user):
         return None
     except Student.MultipleObjectsReturned:
         raise Exception("Multiple students with SUNetID " + sunetid)
+
+def prnText(text,length):
+    if len(text) > length:
+        return text[:length]
+    return text.ljust(length,' ')

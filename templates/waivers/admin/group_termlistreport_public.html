@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load currency %}
+
+{% block title %}
+Group waiver report: {{ fee.name }}
+{% endblock %}
+
+{% block content %}
+    <h1>ASSU Student Activity Fee Waiver Report</h1>
+        <h2>{{ fee.name }}, {{ term }}</h2>
+    <div class='color-box'>
+    <p><span style='font-weight:bold;'>To the group President, Financial Officer, and other key officers:</span>
+        this document is prepared, pursuant to the
+    ASSU Joint Bylaws, to inform you of the students who have received a fee waiver from your group. You are to use
+    this document only to ensure that students who have received a waiver do not participate in your group's services.
+    </p>
+    <p>This document is private, and you may not share it outside the officers listed on your application in MyGroups.
+    Spreading this document beyond these authorized users may be considered a violation of the Fundamental Standard
+    or Governing Documents of the ASSU, and the student(s) whose privacy rights are infringed may have standing to file
+    a case against you and/or your group in the Organizational Conduct Board, Office of Judicial Affairs,
+    and/or ASSU Constitutional Council.</p>
+    </div>
+
+    <p><span style="font-weight:bold;">Total amount waived:</span> {{ total_waiver|currency }}</p>
+<table class='gold-header'>
+<thead>
+<tr>
+    <th>Name</th>
+    <th>SUNetID</th>
+    <th>SUID #</th>
+    <th>Reason(s)</th>
+</tr>
+</thead>
+<tbody>
+{% for waiver in waivers %}
+<tr class="{% cycle '' 'alternate' %}">
+    <td>{{ waiver.student.name }}</td>
+    <td>{{ waiver.student.sunetid }}</td>
+    <td>{{ waiver.student.suid }}</td>
+    <td>{{ waiver.reason }}</td>
+</tr>
+{% endfor %}
+</tbody>
+
+</table>
+    <p style='font-style:italic;'>Current as of: {{ date }} </p>
+
+{% endblock %}

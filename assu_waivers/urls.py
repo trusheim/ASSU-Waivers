@@ -9,7 +9,11 @@ urlpatterns = patterns('waivers.assu_waivers.views',
     (r'^reports/$', 'admin_reportIndex'),
     (r'^reports/groups/(?P<termName>[\w\d-]+)/?$', 'admin_bygroupTermReport'),
     (r'^reports/students/(?P<termName>[\w\d-]+)/?$', 'admin_bystudentTermReport'),
-    (r'^reports/group_public/(?P<groupId>[\d]+)/(?P<termName>[\w\d-]+)/?$', 'admin_bygroupTermListReport')
+    (r'^reports/group/(?P<termName>[\w\d-]+)/(?P<groupId>[\d]+)/?$', 'admin_bygroupTermListReport', {'public': False}, 'groupreport_private'),
+    (r'^reports/group/(?P<termName>[\w\d-]+)/(?P<groupId>[\d]+)/public/?$', 'admin_bygroupTermListReport', {'public': True}, 'groupreport_public'),
+
+    (r'^reports/export/(?P<termName>[\w\d-]+)/prn/$', 'admin_exportPrn'),
+    (r'^reports/export/(?P<termName>[\w\d-]+)/csv/$', 'admin_exportCsv'),
 
 
 )

@@ -17,6 +17,7 @@ Students waiver report
 <tr>
     <th>SUID</th>
     <th>SUNetID</th>
+    <th>Name</th>
     <th>Total waiver</th>
     <th colspan="2"></th>
 </tr>
@@ -26,6 +27,7 @@ Students waiver report
 <tr class="{% cycle 'row1' 'row2' %}">
     <th>{{ report.student__pk }}</th>
     <td>{{ report.student__sunetid }}</td>
+    <td>{{ report.student__name }}</td>
     <td>{{ report.total_waiver|currency }}</td>
     <td><a href="/admin/assu_waivers/feewaiver/?student__suid={{ report.student__pk }}&fee__term__short_name={{ term.short_name }}">View waivers for this term</a></td>
     <td><a href="/admin/assu_waivers/feewaiver/?student__suid={{ report.student__pk }}">View all waivers</a></td>

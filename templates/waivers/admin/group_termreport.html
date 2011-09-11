@@ -18,11 +18,12 @@ Group waiver reports
         <dt>Law</dt><dd>{{ aggregate.2|currency }}</dd>
     </dl>
 
-    <h3>Group Summaries</h3>
+    <h3>Fee Summaries</h3>
 <table>
 <thead>
 <tr>
     <th>Name</th>
+    <th>Reports</th>
     <th>Population</th>
     <th>Fee amount</th>
     <th>Average waiver</th>
@@ -35,7 +36,9 @@ Group waiver reports
 <tbody>
 {% for fee in groups %}
 <tr class="{% cycle 'row1' 'row2' %}">
-    <th><a href="{% url assu_waivers.views.admin_bygroupTermListReport groupId=fee.fee.pk termName=term.short_name %}">{{ fee.fee.name }}</a></th>
+    <th>{{ fee.fee.name }}</th>
+    <td><a href="{% url groupreport_private groupId=fee.fee.pk termName=term.short_name %}">Private</a> /
+    <a href="{% url groupreport_public groupId=fee.fee.pk termName=term.short_name %}">Group JBL</a></td>
     <td>{{ fee.fee.get_population_display }}</td>
     <td>{{ fee.fee.max_amount|currency }}</td>
     <td>{{ fee.average|currency }}</td>
