@@ -1,0 +1,52 @@
+{% extends 'waivers/admin/report_base.html' %}
+{% load currency %}
+
+{% block title %}
+Groups waiver report: {{ term }}
+{% endblock %}
+{% block reportname %}
+Group waiver reports
+{% endblock %}
+
+{% block content %}
+    <h2>Groups waiver report for {{ term }}</h2>
+    <p style='font-style:italic;'>Current as of: {{ date }}</p>
+    <h3>Total Waivers</h3>
+    <p><dl>
+        <dt>Undergraduate</dt><dd>{{ aggregate.0|currency }}</dd>
+        <dt>Graduate</dt><dd>{{ aggregate.1|currency }}</dd>
+        <dt>Law</dt><dd>{{ aggregate.2|currency }}</dd>
+    </dl>
+
+    <h3>Group Summaries</h3>
+<table>
+<thead>
+<tr>
+    <th>Name</th>
+    <th>Population</th>
+    <th>Fee amount</th>
+    <th>Average waiver</th>
+    <th>(% of fee)</th>
+    <th>Number of waivers</th>
+    <th>(% of population)</th>
+    <th>Total waiver amount</th>
+</tr>
+</thead>
+<tbody>
+{% for fee in groups %}
+<tr class="{% cycle 'row1' 'row2' %}">
+    <th><a href="{% url assu_waivers.views.admin_bygroupTermListReport groupId=fee.fee.pk termName=term.short_name %}">{{ fee.fee.name }}</a></th>
+    <td>{{ fee.fee.get_population_display }}</td>
+    <td>{{ fee.fee.max_amount|currency }}</td>
+    <td>{{ fee.average|currency }}</td>
+    <td>{{ fee.avg_pct|floatformat:1 }}%</td>
+    <td>{{ fee.count }}</td>
+    <td>{{ fee.pct|floatformat:1 }}%</td>
+    <td>{{ fee.total|currency }}</td>
+    <td></td>
+</tr>
+{% endfor %}
+</tbody>
+
+</table>
+{% endblock %}

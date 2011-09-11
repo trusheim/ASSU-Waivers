@@ -1,0 +1,38 @@
+{% extends 'waivers/admin/report_base.html' %}
+{% load currency %}
+
+{% block title %}
+Students waiver report: {{ term }}
+{% endblock %}
+{% block reportname %}
+Students waiver report
+{% endblock %}
+
+{% block content %}
+    <h2>All students waiver report for {{ term }}</h2>
+    <p style='font-style:italic;'>Current as of: {{ date }} </p>
+    <p>Only students seeking at least one waiver are shown. All other students are not seeking waivers.</p>
+<table>
+<thead>
+<tr>
+    <th>SUID</th>
+    <th>SUNetID</th>
+    <th>Total waiver</th>
+    <th colspan="2"></th>
+</tr>
+</thead>
+<tbody>
+{% for report in waivers %}
+<tr class="{% cycle 'row1' 'row2' %}">
+    <th>{{ report.student__pk }}</th>
+    <td>{{ report.student__sunetid }}</td>
+    <td>{{ report.total_waiver|currency }}</td>
+    <td><a href="/admin/assu_waivers/feewaiver/?student__suid={{ report.student__pk }}&fee__term__short_name={{ term.short_name }}">View waivers for this term</a></td>
+    <td><a href="/admin/assu_waivers/feewaiver/?student__suid={{ report.student__pk }}">View all waivers</a></td>
+    <td></td>
+</tr>
+{% endfor %}
+</tbody>
+
+</table>
+{% endblock %}

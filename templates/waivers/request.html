@@ -5,6 +5,11 @@
     <h1> Student Activities Fee Waiver Request</h1>
     <div class='box'><p class="last"><span class="important">Instructions:</span> please select the portions of the Student Activities Fee for which you wish to seek a waiver. For each waiver you seek, you
     must provide a reason.</p></div>
+
+    {% if error %}
+    <div class="color-box ui-state-error bold">An error occurred when submitting your waiver request, and your request has not been processed. Please correct the error below.</div>
+    {% endif %}
+    
 <form action="{% url assu_waivers.views.request %}" method="POST">
     {% csrf_token %}
     <table class = 'gold-header'>

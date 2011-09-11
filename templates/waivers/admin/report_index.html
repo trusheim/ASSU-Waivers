@@ -1,0 +1,21 @@
+{% extends 'waivers/admin/report_base.html' %}
+{% load currency %}
+
+{% block title %}
+Waiver reports
+{% endblock %}
+{% block reportname %}
+    All
+{% endblock %}
+
+{% block content %}
+    <h2>Waiver reports</h2>
+
+    {% for term in terms %}
+    <h3>{{ term }}</h3>
+    <ul>
+    <li><a href="{% url assu_waivers.views.admin_bygroupTermReport termName=term.short_name %}">Per-group and aggregate report</a></li>
+    <li><a href="{% url assu_waivers.views.admin_bystudentTermReport termName=term.short_name %}">Per-student report</a></li>
+    </ul>
+    {% endfor %}
+{% endblock %}

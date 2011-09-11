@@ -36,8 +36,8 @@ admin.site.register(Fee,FeeAdmin)
 
 class FeeWaiverAdmin(admin.ModelAdmin):
     list_display = ('fee','student','amount',)
-    list_filter=('fee','fee__term__short_name')
-    search_fields=('student__suid','student__sunetid','fee')
+    list_filter=('fee','fee__term__short_name','student__suid')
+    search_fields=('student__suid','student__sunetid','fee__term__short_name')
     ordering = ('fee','student')
     list_per_page=100
 

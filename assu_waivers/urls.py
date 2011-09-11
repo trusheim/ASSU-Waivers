@@ -6,6 +6,10 @@ urlpatterns = patterns('waivers.assu_waivers.views',
     (r'^request/$', 'request'),
 
     # admin
-    (r'^request/$', 'request')
+    (r'^reports/$', 'admin_reportIndex'),
+    (r'^reports/groups/(?P<termName>[\w\d-]+)/?$', 'admin_bygroupTermReport'),
+    (r'^reports/students/(?P<termName>[\w\d-]+)/?$', 'admin_bystudentTermReport'),
+    (r'^reports/group_public/(?P<groupId>[\d]+)/(?P<termName>[\w\d-]+)/?$', 'admin_bygroupTermListReport')
+
 
 )
