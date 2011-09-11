@@ -79,16 +79,16 @@ class WaiverForm(forms.Form):
         # if they set 0 and had 0 before, don't make a new waiver.
 
     @staticmethod
-    def get_list(term,student,*args,**kwargs):
+    def get_list(enrollment,*args,**kwargs):
 
         # load up some datums
-        fees = Fee.objects.filter(term=term,population=student.population)
+        fees = Fee.objects.filter(term=enrollment.term,population=enrollment.population)
 
         # setup fee forms
         forms = []
         for fee in fees:
-            form = WaiverForm(fee,student,prefix=str(fee.pk),*args,**kwargs)
-            waiver = fee.feewaiver_set.filter(student=student)
+            form = WaiverForm(fee,enrollment.student,prefix=str(fee.pk),*args,**kwargs)
+            waiver = fee.feewaiver_set.filter(student=enrollment.student)
             if waiver.count():
                 form.set_current(waiver.get())
             forms.append(form)
