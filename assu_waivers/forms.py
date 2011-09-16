@@ -108,3 +108,6 @@ class WaiverForm(forms.Form):
     def save_list(list):
         for form in list:
             form.save()
+
+class StudentUploadForm(forms.Form):
+    csv = forms.FileField()

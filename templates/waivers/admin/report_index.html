@@ -18,6 +18,7 @@ Waiver reports
     <li><a href="{% url assu_waivers.views.admin_bystudentTermReport termName=term.short_name %}">Per-student report</a></li>
     <li>Download waiver summary as: <a href="{% url assu_waivers.views.admin_exportCsv termName=term.short_name %}"> CSV (Microsoft Excel)</a> /
         <a href="{% url assu_waivers.views.admin_exportPrn termName=term.short_name %}">PRN (.dat for SSC)</a></li>
+    <li><a href="{% url assu_waivers.views.admin_importStudentCsv termName=term.short_name %}">Upload student enrollment information CSV</a></li>
 
     </ul>
     {% endfor %}

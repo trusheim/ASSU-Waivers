@@ -9,8 +9,8 @@ from django.db.models.aggregates import Sum, Avg
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
-from assu_waivers.forms import WaiverForm
-from assu_waivers.models import Fee, Term, Enrollment, FeeWaiver
+from assu_waivers.forms import WaiverForm, StudentUploadForm
+from assu_waivers.models import Fee, Term, Enrollment, FeeWaiver, Student
 from assu_waivers.services import GetTermForDate, GetStudentFromUser, prnText
 
 @login_required
@@ -63,13 +63,8 @@ def request(request):
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)
-def admin_export(request):
-    return HttpResponseRedirect(reverse('django.contrib.admin.views.index'))
-
-@login_required
-@user_passes_test(lambda u: u.is_staff)
 def admin_reportIndex(request):
-    terms = Term.objects.all()
+    terms = Term.objects.order_by('-pk').all()
     return render_to_response('waivers/admin/report_index.html',{'terms': terms}, context_instance=RequestContext(request))
 
 @login_required
@@ -250,3 +245,42 @@ def admin_exportCsv(request,termName):
     response.write(final)
 
     return response
+
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+def admin_importStudentCsv(request, termName):
+    term = get_object_or_404(Term,short_name=termName)
+
+    form = StudentUploadForm()
+    if request.method == 'POST':
+        form = StudentUploadForm(request.POST,request.FILES)
+
+    if not form.is_valid():
+        return render_to_response('waivers/admin/upload.html',{'form': form,'term': term}, context_instance=RequestContext(request))
+
+    try:
+
+        file = request.FILES['csv']
+        reader = csv.reader(file.chunks())
+
+        num_updated = 0
+
+        for student_record in reader:
+            # (suid, sunetid, name, status, no_waivers)
+            no_waivers = False
+            if student_record[5] == "NCAA":
+                no_waivers = True
+            student = Student.objects.get_or_create(suid=student_record[0],
+                                                    defaults={'sunetid': student_record[1], 'name': student_record[2],'no_waivers': no_waivers})
+            if no_waivers != student.no_waivers:
+                student.no_waivers = no_waivers
+                student.save()
+
+            enrollment = Enrollment.objects.get_or_create(student=student, term=term, defaults={'population': Student.popFromRegistrarStatus(student_record[3])})
+            num_updated += 1
+
+        return render_to_response('waivers/admin/upload_done.html',{'num': num_updated, 'term': term}, context_instance=RequestContext(request))
+    except Exception as e:
+        return render_to_response('waivers/admin/upload_done.html',{'error': e.message}, context_instance=RequestContext(request))
+
+

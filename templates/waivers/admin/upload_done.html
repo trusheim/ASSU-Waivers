@@ -1,0 +1,20 @@
+{% extends 'waivers/admin/report_base.html' %}
+{% load currency %}
+
+{% block title %}
+Student enrollment upload
+{% endblock %}
+{% block reportname %}
+    Student enrollment upload
+{% endblock %}
+
+{% block content %}
+    <h2>Student Enrollment Upload</h2>
+
+    {% if error %}
+    <p style='font-weight:bold;'>AN ERROR OCCURRED WHEN UPLOADING! The records have not been successfully updated!</p>
+    <p>{{ error }}</p>
+    {% else %}
+    <p>Upload for {{ term }} completed. {{ num }} enrollment records inserted or updated.</p>
+    {% endif %}
+{% endblock %}

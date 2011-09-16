@@ -21,11 +21,23 @@ class Student(models.Model):
     def __unicode__(self):
         return self.sunetid
 
+    @staticmethod
+    def popFromRegistrarStatus(registrar_status):
+        if registrar_status == "UG":
+            return 0
+        elif registrar_status == "G":
+            return 1
+        else:
+            raise Exception("Unexpected registration status provided")
+
 class Enrollment(models.Model):
     student = models.ForeignKey(Student)
     term = models.ForeignKey(Term)
     population = models.IntegerField(choices=POPULATIONS)
     added = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('student', 'term')
 
     def __unicode__(self):
         return "%s (%s)" % (self.student.sunetid, self.term.short_name)
