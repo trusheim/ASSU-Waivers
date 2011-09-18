@@ -46,7 +46,7 @@
         
             {# adding this up top... not really in the normal CSS styles, but hey. #}
             <div class="right-box" style='width:auto;'>
-                    {% if user.is_guest %}
+                    {% if user.is_anonymous %}
                        Not logged in.
                     {% else %}
                         Logged in as {{ user.get_full_name }} ({{ user.username }})
