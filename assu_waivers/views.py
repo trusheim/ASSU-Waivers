@@ -265,13 +265,6 @@ def admin_importStudentCsv(request, termName):
     if not form.is_valid():
         return render_to_response('waivers/admin/upload.html',{'form': form,'term': term}, context_instance=RequestContext(request))
 
-    f = request.FILES['csv']
-    destination = open('/Users/stephen/Desktop/test.csv', 'wb+')
-    for chunk in f.chunks():
-        destination.write(chunk)
-    destination.close()
-    print "DONE"
-
     # process NCAA exemptions
     try:
         athlete_csv = request.FILES['athletes']
