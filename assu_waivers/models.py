@@ -22,13 +22,13 @@ class Student(models.Model):
         return self.sunetid
 
     @staticmethod
-    def popFromRegistrarStatus(registrar_status):
-        if registrar_status == "UG":
+    def popFromRegistrarStatus(status):
+        if status == "UG":
             return 0
-        elif registrar_status == "G":
+        elif status == "GR" or status == "LAW" or status == "GSB" or status == "MED":
             return 1
         else:
-            raise Exception("Unexpected registration status provided")
+            raise Exception("Unexpected registration status provided: %s" % status)
 
 class Enrollment(models.Model):
     student = models.ForeignKey(Student)

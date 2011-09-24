@@ -11,10 +11,14 @@ Student enrollment upload
     <h2>Student Enrollment Upload</h2>
 
     <p><span class='bold'>Upload enrollment data for {{ term }}.</span></p>
+    <p>Ensure that all uploaded files do NOT have a header row, are in CSV format (File ... Save As in Microsoft Excel), and contain exactly
+    the people you wish to upload.</p>
+    <hr />
 
     <form method = 'POST' action='{% url assu_waivers.views.admin_importStudentCsv termName=term.short_name %}' enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
+
     <p>
         <span style='font-weight:bold;'>THIS ACTION CANNOT BE UNDONE. Please be sure you are uploading the correct file!</span><br />
         <input type='submit' value='Upload student enrollment data' /></p>
