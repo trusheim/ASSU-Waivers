@@ -268,16 +268,17 @@ def admin_importStudentCsv(request, termName):
     f = request.FILES['csv']
     destination = open('/Users/stephen/Desktop/test.csv', 'wb+')
     for chunk in f.chunks():
-        pass
-        #print chunk.
+        destination.write(chunk)
     destination.close()
     print "DONE"
 
     # process NCAA exemptions
     try:
-        print request.FILES['csv'].read()
         athlete_csv = request.FILES['athletes']
-        reader = csv.reader(athlete_csv)
+        lines = []
+        for chunk in athlete_csv.chunks():
+            lines += chunk.splitlines()
+        reader = csv.reader(lines)
 
         num_exceptions = 0
 
@@ -292,8 +293,11 @@ def admin_importStudentCsv(request, termName):
     try:
 
         csv_file = request.FILES['csv']
-        reader = csv.reader(csv_file.chunks())
+        lines = []
+        for chunk in csv_file.chunks():
+            lines += chunk.splitlines()
 
+        reader = csv.reader(lines)
         num_updated = 0
 
         for student_record in reader:
@@ -301,9 +305,10 @@ def admin_importStudentCsv(request, termName):
             if student_record[0] in exceptions:
                 no_waivers = True
             student = Student.objects.get_or_create(suid=student_record[0],
-                                                    defaults={'sunetid': student_record[1].lower(), 'name': "UNKNOWN",'no_waivers': no_waivers})
-            if no_waivers != student.no_waivers:
-                student.no_waivers = no_waivers
+                                                    defaults={'sunetid': student_record[1].lower(), 'name': "UNKNOWN",'no_waiver': no_waivers})
+            student = student[0]
+            if no_waivers != student.no_waiver:
+                student.no_waiver = no_waivers
                 student.save()
 
             enrollment = Enrollment.objects.get_or_create(student=student, term=term, defaults={'population': Student.popFromRegistrarStatus(student_record[2])})

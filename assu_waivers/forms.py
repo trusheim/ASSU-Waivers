@@ -111,4 +111,4 @@ class WaiverForm(forms.Form):
 
 class StudentUploadForm(forms.Form):
     csv = forms.FileField(label="Student data CSV")
-    #athletes = forms.FileField(label="Athlete Exception CSV")
+    athletes = forms.FileField(label="Athlete Exception CSV")
