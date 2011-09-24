@@ -268,7 +268,8 @@ def admin_importStudentCsv(request, termName):
     f = request.FILES['csv']
     destination = open('/Users/stephen/Desktop/test.csv', 'wb+')
     for chunk in f.chunks():
-        print chunk.
+        pass
+        #print chunk.
     destination.close()
     print "DONE"
 
