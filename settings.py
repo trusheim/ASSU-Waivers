@@ -4,7 +4,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@domain.com'),
+     ('Stephen Trusheim', 'admin-team@sse.stanford.edu'),
 )
 
 MANAGERS = ADMINS
@@ -14,7 +14,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'test_waivers',                      # Or path to database file if using sqlite3.
         'USER': 'root',                      # Not used with sqlite3.
-        'PASSWORD': 'hi',                  # Not used with sqlite3.
+        'PASSWORD': 'hello1',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
@@ -45,7 +45,7 @@ USE_L10N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = '/Users/trusheim/waivers/media/'
+MEDIA_ROOT = ''
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
@@ -72,13 +72,13 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     #'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'webauth.middleware.WebauthMiddleware',
+    'waivers.webauth.middleware.WebauthMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
 ROOT_URLCONF = 'waivers.urls'
 
-TEMPLATE_DIRS = ('/Users/trusheim/Desktop/waivers/templates',)
+TEMPLATE_DIRS = (None,)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -94,8 +94,10 @@ INSTALLED_APPS = (
     'waivers.webauth'
 )
 
-WEBAUTH_SHARED_SECRET = 'test'
-WEBAUTH_URL = 'https://www.stanford.edu/~trusheim/cgi-bin/wa-authenticate-test.php'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-BASE_URL = 'http://localhost:8000/'
 LOGIN_URL = '/webauth/login/'
+
+# overwrite
+WEBAUTH_SHARED_SECRET = ''
+WEBAUTH_URL = ''
+BASE_URL = ''
