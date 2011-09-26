@@ -179,7 +179,7 @@ def admin_exportPrn(request,termName):
 
         output.write(prnText(waiver['student__pk'],10))
         output.write(prnText(waiver['student__name'],32))
-        output.write(prnText("wat.",15))
+        output.write(prnText("700000000001",15))
         output.write(prnText(amount_text,10))
         output.write(prnText(term.short_name,5))
         output.write(prnText(datetime_text,15))
@@ -228,7 +228,7 @@ def admin_exportCsv(request,termName):
         output_csv.writerow([
             waiver['student__pk'],
             waiver['student__name'],
-            'wat.',
+            '700000000001',
             amount_text,
             term.short_name,
             datetime_text
