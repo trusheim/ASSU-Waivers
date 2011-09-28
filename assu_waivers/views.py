@@ -250,7 +250,7 @@ def admin_exportCsv(request,termName):
 @user_passes_test(lambda u: u.is_staff)
 def admin_importStudentCsv(request, termName):
     """
-    Student CSV format: SUID, SUNetID, Bill Category
+    Student CSV format: SUID, Name, SUNetID, Bill Category
         - Bill Category: UG, GR, [GSB, MED, LAW] (all considered GR)
         - WILL NEED TO BE CHANGED FOR WINTER QUARTER
     Athletic people CSV format: sport, name, SUID
@@ -277,7 +277,6 @@ def admin_importStudentCsv(request, termName):
 
         exceptions = set()
         for student in reader:
-            print student
             exceptions.add(student[2])
             num_exceptions += 1
     except Exception as e:
@@ -298,13 +297,13 @@ def admin_importStudentCsv(request, termName):
             if student_record[0] in exceptions:
                 no_waivers = True
             student = Student.objects.get_or_create(suid=student_record[0],
-                                                    defaults={'sunetid': student_record[1].lower(), 'name': "UNKNOWN",'no_waiver': no_waivers})
+                                                    defaults={'sunetid': student_record[2].lower(), 'name': "UNKNOWN",'no_waiver': no_waivers})
             student = student[0]
-            if no_waivers != student.no_waiver:
-                student.no_waiver = no_waivers
-                student.save()
+            student.name = unicode(student_record[1],'utf-8')
+            student.no_waiver = no_waivers
+            student.save()
 
-            enrollment = Enrollment.objects.get_or_create(student=student, term=term, defaults={'population': Student.popFromRegistrarStatus(student_record[2])})
+            enrollment = Enrollment.objects.get_or_create(student=student, term=term, defaults={'population': Student.popFromRegistrarStatus(student_record[3])})
             num_updated += 1
 
         return render_to_response('waivers/admin/upload_done.html',{'num': num_updated, 'term': term}, context_instance=RequestContext(request))
