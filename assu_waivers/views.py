@@ -1,3 +1,4 @@
+import codecs
 import csv
 import random
 from datetime import datetime
@@ -211,7 +212,8 @@ def admin_exportCsv(request,termName):
     term = get_object_or_404(Term,short_name=termName)
 
     output = StringIO.StringIO()
-    output_csv = csv.writer(output)
+    obuffer = codecs.getwriter("utf8")(output)
+    output_csv = csv.writer(obuffer)
 
     total_waiver = 0
     num_reqs = 0
@@ -227,7 +229,7 @@ def admin_exportCsv(request,termName):
 
         output_csv.writerow([
             waiver['student__pk'],
-            waiver['student__name'],
+            unicode(waiver['student__name'],'utf-8'),
             '700000000001',
             amount_text,
             term.short_name,
