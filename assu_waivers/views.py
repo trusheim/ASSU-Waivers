@@ -219,7 +219,7 @@ def admin_exportCsv(request,termName):
     num_reqs = 0
     waivers = FeeWaiver.objects.filter(fee__term=term).values('student__pk','student__sunetid','student__name','updated').annotate(total_amount=Sum('amount'))
 
-    output_csv.writerow([unicode('SUID'),unicode('Name'),unicode('Unknown Field'),
+    output_csv.writerow([unicode('SUID'),unicode('Name'),unicode('Type'),
                          unicode('Total Waiver'),unicode('Term'),unicode('Reference Date')])
 
     for waiver in waivers:
