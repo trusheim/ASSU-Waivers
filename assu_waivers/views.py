@@ -229,7 +229,7 @@ def admin_exportCsv(request,termName):
 
         output_csv.writerow([
             waiver['student__pk'],
-            unicode(waiver['student__name'],'utf-8'),
+            waiver['student__name'],
             '700000000001',
             amount_text,
             term.short_name,
