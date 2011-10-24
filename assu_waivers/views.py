@@ -212,14 +212,15 @@ def admin_exportCsv(request,termName):
     term = get_object_or_404(Term,short_name=termName)
 
     output = StringIO.StringIO()
-    obuffer = codecs.getwriter("utf8")(output)
+    obuffer = codecs.getwriter("utf-8")(output)
     output_csv = csv.writer(obuffer)
 
     total_waiver = 0
     num_reqs = 0
     waivers = FeeWaiver.objects.filter(fee__term=term).values('student__pk','student__sunetid','student__name','updated').annotate(total_amount=Sum('amount'))
 
-    output_csv.writerow(['SUID','Name','Unknown Field','Total Waiver','Term','Reference Date'])
+    output_csv.writerow([unicode('SUID'),unicode('Name'),unicode('Unknown Field'),
+                         unicode('Total Waiver'),unicode('Term'),unicode('Reference Date')])
 
     for waiver in waivers:
         num_reqs += 1
