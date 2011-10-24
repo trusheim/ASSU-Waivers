@@ -230,7 +230,7 @@ def admin_exportCsv(request,termName):
 
         output_csv.writerow([
             waiver['student__pk'],
-            waiver['student__name'],
+            waiver['student__name'].encode('ascii','ignore'),
             '700000000001',
             amount_text,
             term.short_name,
