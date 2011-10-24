@@ -1,7 +1,7 @@
 import csv
 import random
 from datetime import datetime
-import cStringIO
+import StringIO
 from time import strftime
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.urlresolvers import reverse
@@ -210,7 +210,7 @@ def admin_exportPrn(request,termName):
 def admin_exportCsv(request,termName):
     term = get_object_or_404(Term,short_name=termName)
 
-    output = cStringIO.StringIO()
+    output = StringIO.StringIO()
     output_csv = csv.writer(output)
 
     total_waiver = 0
