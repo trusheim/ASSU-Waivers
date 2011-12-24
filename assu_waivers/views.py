@@ -56,7 +56,17 @@ def request(request):
         forms = WaiverForm.get_list(enrollment,data=request.POST)
         if WaiverForm.verify_list(forms):
             WaiverForm.save_list(forms)
-            return render_to_response('waivers/complete.html',{'date': datetime.now(), 'term': term}, context_instance=RequestContext(request))
+
+            # logic to determine total amount of waivers, total possible amount
+            possible = Fee.objects.filter(term=term,population=enrollment.population).aggregate(Sum('max_amount'))['max_amount__sum']
+            total = FeeWaiver.objects.filter(fee__term=term,student=student).aggregate(Sum('amount'))['amount__sum']
+            return render_to_response('waivers/complete.html',
+                    {'date': datetime.now(),
+                     'term': term,
+                     'total': total,
+                     'possible': possible,
+                     'population': enrollment.get_population_display()
+                }, context_instance=RequestContext(request))
         else:
             is_error = True
 
