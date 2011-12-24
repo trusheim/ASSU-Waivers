@@ -26,7 +26,7 @@ def bygroupTermReport(request,termName):
     term = get_object_or_404(Term,short_name=termName)
 
     fees = Fee.objects.filter(term=term)
-    total_waiver = [0,0,0]
+    total_waiver = [0,0] # removing Law
     for fee in fees:
         total = fee.feewaiver_set.aggregate(Sum('amount'))['amount__sum']
         if total is None:
@@ -55,11 +55,17 @@ def bygroupTermReport(request,termName):
                          'avg_pct': avg_pct
         })
 
+    num_waivers = [0,0]
+    num_waivers[0] = FeeWaiver.objects.filter(fee__term=term,fee__population=0).values('student__pk','student__sunetid','student__name').distinct().count()
+    num_waivers[1] = FeeWaiver.objects.filter(fee__term=term,fee__population=1).values('student__pk','student__sunetid','student__name').distinct().count()
+
+
     return render_to_response('waivers/admin/group_termreport.html',{
         'groups': fee_info,
         'term':term,
         'date': datetime.now(),
-        'aggregate': total_waiver
+        'aggregate': total_waiver,
+        'num': num_waivers
     }, context_instance=RequestContext(request))
 
 @login_required
@@ -69,6 +75,39 @@ def bystudentTermReport(request,termName):
 
     waivers = FeeWaiver.objects.filter(fee__term=term).values('student__pk','student__sunetid','student__name').annotate(total_waiver=Sum('amount'))
     return render_to_response('waivers/admin/user_termreport.html',{'waivers': waivers,'term':term, 'date': datetime.now()}, context_instance=RequestContext(request))
+
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+def studentReport(request,termName,student):
+    term = get_object_or_404(Term,short_name=termName)
+    student = get_object_or_404(Student,sunetid=student)
+    enrollment = get_object_or_404(Enrollment,student=student,term=term)
+    population = enrollment.get_population_display()
+
+    waivers = FeeWaiver.objects.filter(fee__term=term,student=student)
+    possible_waivers = Fee.objects.filter(term=term,population=enrollment.population)
+
+    not_waived = set(possible_waivers)
+    total = 0
+    for waiver in waivers:
+        not_waived.remove(waiver.fee)
+        total += waiver.amount
+
+    possible = Fee.objects.filter(term=term,population=enrollment.population).aggregate(Sum('max_amount'))['max_amount__sum']
+    if possible is None:
+        possible = 0
+
+    return render_to_response('waivers/admin/user_termreportone.html',
+        {
+            'waivers': waivers,
+            'term':term,
+            'student': student,
+            'date': datetime.now(),
+            'not_waived':not_waived,
+            'total': total,
+            'possible': possible,
+            'enrollment': population
+        }, context_instance=RequestContext(request))
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)

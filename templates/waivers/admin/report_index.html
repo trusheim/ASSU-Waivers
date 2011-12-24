@@ -11,15 +11,23 @@ Waiver reports
 {% block content %}
     <h2>Waiver reports</h2>
 
+    <table>
+    <thead><tr>
+        <td style="border-right:1px solid #ddd">Term</td>
+        <td colspan=2 style="border-right:1px solid #ddd">Reports</td>
+        <td colspan=2 style="border-right:1px solid #ddd">Export</td>
+        <td>Import</td>
+    </tr></thead>
     {% for term in terms %}
-    <h3>{{ term }}</h3>
-    <ul>
-    <li><a href="{% url assu_waivers.admin_views.bygroupTermReport termName=term.short_name %}">Per-group and aggregate report</a></li>
-    <li><a href="{% url assu_waivers.admin_views.bystudentTermReport termName=term.short_name %}">Per-student report</a></li>
-    <li>Download waiver summary as: <a href="{% url assu_waivers.admin_views.exportCsv termName=term.short_name %}"> CSV (Microsoft Excel)</a> /
-        <a href="{% url assu_waivers.admin_views.exportPrn termName=term.short_name %}">PRN (.dat for SSC)</a></li>
-    <li><a href="{% url assu_waivers.admin_views.importStudentCsv termName=term.short_name %}">Upload student enrollment information CSV</a></li>
+    <tr>
+        <td style='font-weight:bold;border-right:1px solid #ddd'>{{ term }}</td>
+    <td ><a href="{% url assu_waivers.admin_views.bygroupTermReport termName=term.short_name %}">Per-group and aggregate report</a></td>
+    <td style="border-right:1px solid #ddd"><a href="{% url assu_waivers.admin_views.bystudentTermReport termName=term.short_name %}">Per-student report</a></td>
+    <td><a href="{% url assu_waivers.admin_views.exportCsv termName=term.short_name %}"> CSV (Microsoft Excel)</a></td>
+    <td style="border-right:1px solid #ddd"><a href="{% url assu_waivers.admin_views.exportPrn termName=term.short_name %}">PRN (.dat for SSC)</a></td>
+    <td><a href="{% url assu_waivers.admin_views.importStudentCsv termName=term.short_name %}">Upload student enrollment information</a></td>
 
-    </ul>
+    </tr>
     {% endfor %}
+    </table>
 {% endblock %}

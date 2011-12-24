@@ -11,12 +11,14 @@ Group waiver reports
 {% block content %}
     <h2>Groups waiver report for {{ term }}</h2>
     <p style='font-style:italic;'>Current as of: {{ date }}</p>
-    <h3>Total Waivers</h3>
-    <p><dl>
-        <dt>Undergraduate</dt><dd>{{ aggregate.0|currency }}</dd>
-        <dt>Graduate</dt><dd>{{ aggregate.1|currency }}</dd>
-        <dt>Law</dt><dd>{{ aggregate.2|currency }}</dd>
-    </dl>
+    <h3>Totals</h3>
+    <table>
+    <thead>
+    <tr><td>Population</td><td>Total Waived</td><td>Number of Waivers</td></tr>
+    </thead>
+    <tr><td style="font-weight:bold;">Undergraduate</td><td>{{ aggregate.0|currency }}</td><td>{{ num.0 }}</td></tr>
+    <tr><td style="font-weight:bold;">Graduate</td><td>{{ aggregate.1|currency }}</td><td>{{ num.1 }}</td></tr>
+    </table>
 
     <h3>Fee Summaries</h3>
 <table>

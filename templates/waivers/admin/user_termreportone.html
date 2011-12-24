@@ -1,0 +1,47 @@
+{% extends 'waivers/admin/report_base.html' %}
+{% load currency %}
+
+{% block title %}
+Student Waiver Report: {{ student }} for {{ term }}
+{% endblock %}
+{% block reportname %}
+    <a href="{% url assu_waivers.admin_views.bystudentTermReport termName=term.short_name %}">Student waiver report</a> &rsaquo; {{ student }}
+{% endblock %}
+
+{% block content %}
+    <h2>Student Waiver Report for {{ student }}, {{ term }}</h2>
+    <p style='font-style:italic;'>Current as of: {{ date }}</p>
+
+    <h3>Total Waived</h3>
+    {{ total|currency }} / {{ possible|currency }} ({{ enrollment }})
+    <h3>Waived Fees</h3>
+<table>
+<thead>
+<tr>
+    <th>Name</th>
+    <th>Waived</th>
+    <th>(Possible)</th>
+</tr>
+</thead>
+<tbody>
+{% for waiver in waivers %}
+<tr class="{% cycle 'row1' 'row2' %}">
+    <th>{{ waiver.fee.name }}</th>
+    <td>{{ waiver.amount|currency }}</td>
+    <td>{{ waiver.fee.max_amount|currency }}</td>
+</tr>
+{% endfor %}
+<tr>
+    <th colspan="3">Fees Not Waived</th>
+</tr>
+{% for fee in not_waived %}
+    <tr class="{% cycle 'row1' 'row2' %}">
+        <th>{{ fee.name }}</th>
+        <td>{{ 0|currency }}</td>
+        <td>{{ fee.max_amount|currency }}</td>
+    </tr>
+{% endfor %}
+</tbody>
+
+</table>
+{% endblock %}

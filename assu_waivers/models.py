@@ -1,6 +1,7 @@
 from django.db import models
 
-POPULATIONS = ((0, "Undergraduate"), (1, "Graduate"), (2, "Law"), )
+POPULATIONS = ((0, "Undergraduate"), (1, "Graduate"), )
+# removed Law because that's not used anymore
 
 class Term(models.Model):
     short_name = models.SlugField(max_length=5,blank=False, verbose_name="Term", help_text="e.g. A1011, W1011, S1011 (max 5 letters & numbers, no spaces)")

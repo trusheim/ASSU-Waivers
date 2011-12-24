@@ -19,7 +19,7 @@ Students waiver report
     <th>SUNetID</th>
     <th>Name</th>
     <th>Total waiver</th>
-    <th colspan="2"></th>
+    <th></th>
 </tr>
 </thead>
 <tbody>
@@ -29,8 +29,7 @@ Students waiver report
     <td>{{ report.student__sunetid }}</td>
     <td>{{ report.student__name }}</td>
     <td>{{ report.total_waiver|currency }}</td>
-    <td><a href="/admin/assu_waivers/feewaiver/?student__suid={{ report.student__pk }}&fee__term__short_name={{ term.short_name }}">View waivers for this term</a></td>
-    <td><a href="/admin/assu_waivers/feewaiver/?student__suid={{ report.student__pk }}">View all waivers</a></td>
+    <td><a href="{% url assu_waivers.admin_views.studentReport termName=term.short_name student=report.student__sunetid %}">See Waivers</a>
     <td></td>
 </tr>
 {% endfor %}
