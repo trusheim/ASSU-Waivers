@@ -9,18 +9,18 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
 from assu_waivers.forms import StudentUploadForm
-from assu_waivers.models import Term, Fee, Enrollment, FeeWaiver
+from assu_waivers.models import Term, Fee, Enrollment, FeeWaiver, Student
 from assu_waivers.services import prnText
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)
-def admin_reportIndex(request):
+def reportIndex(request):
     terms = Term.objects.order_by('-pk').all()
     return render_to_response('waivers/admin/report_index.html',{'terms': terms}, context_instance=RequestContext(request))
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)
-def admin_bygroupTermReport(request,termName):
+def bygroupTermReport(request,termName):
 
     fee_info = []
     term = get_object_or_404(Term,short_name=termName)
@@ -64,7 +64,7 @@ def admin_bygroupTermReport(request,termName):
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)
-def admin_bystudentTermReport(request,termName):
+def bystudentTermReport(request,termName):
     term = get_object_or_404(Term,short_name=termName)
 
     waivers = FeeWaiver.objects.filter(fee__term=term).values('student__pk','student__sunetid','student__name').annotate(total_waiver=Sum('amount'))
@@ -72,7 +72,7 @@ def admin_bystudentTermReport(request,termName):
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)
-def admin_bygroupTermListReport(request,termName,groupId,public=False):
+def bygroupTermListReport(request,termName,groupId,public=False):
     term = get_object_or_404(Term,short_name=termName)
     fee = get_object_or_404(Fee,pk=groupId)
 
@@ -97,7 +97,7 @@ def admin_bygroupTermListReport(request,termName,groupId,public=False):
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)
-def admin_exportPrn(request,termName):
+def exportPrn(request,termName):
     """
     PRN is just space-delimited text (i.e., there is a field width, and we either truncate or pad with spaces until we are that length.)
     File format, per the SSC on Sep 1 2011:
@@ -130,7 +130,7 @@ def admin_exportPrn(request,termName):
         datetime_text = waiver['updated'].strftime("%y-%m-%d-%H-%M")
 
         obuffer.write(prnText(waiver['student__pk'],10))
-        obuffer.write(prnText(waiver['student__name'],32))
+        obuffer.write(prnText(waiver['student__name'].encode('ascii','replace'),32))
         obuffer.write(prnText("700000000001",15))
         obuffer.write(prnText(amount_text,10))
         obuffer.write(prnText(term.short_name,5))
@@ -159,7 +159,7 @@ def admin_exportPrn(request,termName):
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)
-def admin_exportCsv(request,termName):
+def exportCsv(request,termName):
     term = get_object_or_404(Term,short_name=termName)
 
     output = StringIO.StringIO()
@@ -181,7 +181,7 @@ def admin_exportCsv(request,termName):
 
         output_csv.writerow([
             waiver['student__pk'],
-            waiver['student__name'].encode('ascii','ignore'),
+            waiver['student__name'].encode('ascii','replace'),
             '700000000001',
             amount_text,
             term.short_name,
@@ -202,7 +202,7 @@ def admin_exportCsv(request,termName):
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)
-def admin_importStudentCsv(request, termName):
+def importStudentCsv(request, termName):
     """
     Student CSV format: SUID, Name, SUNetID, Bill Category
         - Bill Category: UG, GR, [GSB, MED, LAW] (all considered GR)
