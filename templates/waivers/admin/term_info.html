@@ -1,0 +1,63 @@
+{% extends 'waivers/admin/report_base.html' %}
+
+{% block title %}
+    Term name information
+{% endblock %}
+{% block reportname %}
+    Term name information
+{% endblock %}
+
+{% block content %}
+<h2>Term Naming Information</h2>
+<p>Stanford uses numeric codes to refer to each term. These numeric codes are the "short names" of each
+term for the waivers system. In short:</p>
+<p>4-digit code:
+    <ul>
+    <li>First digit is a 1</li>
+    <li>Second two digits are the two-digit year when the school year ends (e.g.: the 2009-10 school year
+        ends in 2010, so the two digits are "10"; the 2012-13 year ends in 2013, so "13")</li>
+    <li>The fourth digit is 2 for fall, 4 for winter, 6 for spring, and 8 for summer.</li>
+    </ul>
+</p>
+<h3>Table of Term Numbers</h3>
+<p>Here's the codes for upcoming years:</p>
+<pre>
+1092 -> 2008-09 Autumn
+1094 -> 2008-09 Winter
+1096 -> 2008-09 Spring
+1098 -> 2008-09 Summer
+1102 -> 2009-10 Autumn
+1104 -> 2009-10 Winter
+1106 -> 2009-10 Spring
+1108 -> 2009-10 Summer
+1112 -> 2010-11 Autumn
+1114 -> 2010-11 Winter
+1116 -> 2010-11 Spring
+1118 -> 2010-11 Summer
+1122 -> 2011-12 Autumn
+1124 -> 2011-12 Winter
+1126 -> 2011-12 Spring
+1128 -> 2011-12 Summer
+1132 -> 2012-13 Autumn
+1134 -> 2012-13 Winter
+1136 -> 2012-13 Spring
+1138 -> 2012-13 Summer
+1142 -> 2013-14 Autumn
+1144 -> 2013-14 Winter
+1146 -> 2013-14 Spring
+1148 -> 2013-14 Summer
+1152 -> 2014-15 Autumn
+1154 -> 2014-15 Winter
+1156 -> 2014-15 Spring
+1158 -> 2014-15 Summer
+1162 -> 2015-16 Autumn
+1164 -> 2015-16 Winter
+1166 -> 2015-16 Spring
+1168 -> 2015-16 Summer
+1172 -> 2016-17 Autumn
+1182 -> 2017-18 Autumn
+1192 -> 2018-19 Autumn
+1202 -> 2019-20 Autumn
+</pre>
+
+{% endblock %}

@@ -303,4 +303,7 @@ def importStudentCsv(request, termName):
     except Exception as e:
         return render_to_response('waivers/admin/upload_done.html',{'error': e}, context_instance=RequestContext(request))
 
-
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+def termInfoSheet(request):
+    return render_to_response('waivers/admin/term_info.html',{}, context_instance=RequestContext(request))

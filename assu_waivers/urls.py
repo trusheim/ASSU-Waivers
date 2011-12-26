@@ -19,6 +19,7 @@ urlpatterns = patterns('waivers.assu_waivers',
 
     (r'^reports/upload/(?P<termName>[\w\d-]+)/$', 'admin_views.importStudentCsv'),
 
+    (r'^reports/term_info$', 'admin_views.termInfoSheet'),
 
 
 )

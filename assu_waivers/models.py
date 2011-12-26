@@ -4,7 +4,7 @@ POPULATIONS = ((0, "Undergraduate"), (1, "Graduate"), )
 # removed Law because that's not used anymore
 
 class Term(models.Model):
-    short_name = models.SlugField(max_length=5,blank=False, verbose_name="Term", help_text="SSC short code for the quarter")
+    short_name = models.SlugField(max_length=5,blank=False, verbose_name="Term", help_text="SSC short code for the quarter - see <a href ='/reports/term_info'>this document</a>")
     long_name = models.CharField(max_length=128, blank=False, verbose_name="Term name", help_text="e.g. Winter 2010-2011")
     refund_opens = models.DateTimeField(blank=False, verbose_name="Date/time this waiver period opens", help_text="8:00 AM on the first day of the quarter")
     refund_closes = models.DateTimeField(blank=False, verbose_name="Date/time this waiver period closes", help_text="5:00 PM on the second Friday of the quarter")
