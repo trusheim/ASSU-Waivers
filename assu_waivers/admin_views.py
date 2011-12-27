@@ -10,7 +10,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
 from assu_waivers.forms import StudentUploadForm
 from assu_waivers.models import Term, Fee, Enrollment, FeeWaiver, Student
-from assu_waivers.services import prnText
+from assu_waivers.services import PrnText
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)
@@ -168,21 +168,21 @@ def exportPrn(request,termName):
         total_waiver += waiver['total_amount']
         datetime_text = waiver['updated'].strftime("%y-%m-%d-%H-%M")
 
-        obuffer.write(prnText(waiver['student__pk'],10))
-        obuffer.write(prnText(waiver['student__name'].encode('ascii','replace'),32))
-        obuffer.write(prnText("700000000001",15))
-        obuffer.write(prnText(amount_text,10))
-        obuffer.write(prnText(term.short_name,5))
-        obuffer.write(prnText(datetime_text,15))
+        obuffer.write(PrnText(waiver['student__pk'],10))
+        obuffer.write(PrnText(waiver['student__name'].encode('ascii','replace'),32))
+        obuffer.write(PrnText("700000000001",15))
+        obuffer.write(PrnText(amount_text,10))
+        obuffer.write(PrnText(term.short_name,5))
+        obuffer.write(PrnText(datetime_text,15))
         obuffer.write("\n")
 
     # end line: number of records and total amount
-    obuffer.write(prnText(str(num_reqs),10))
-    obuffer.write(prnText('',32))
-    obuffer.write(prnText('',15))
-    obuffer.write(prnText("%.2f" % total_waiver,10))
-    obuffer.write(prnText('',5))
-    obuffer.write(prnText('',15))
+    obuffer.write(PrnText(str(num_reqs),10))
+    obuffer.write(PrnText('',32))
+    obuffer.write(PrnText('',15))
+    obuffer.write(PrnText("%.2f" % total_waiver,10))
+    obuffer.write(PrnText('',5))
+    obuffer.write(PrnText('',15))
 
     final = output.getvalue()
     output.close()

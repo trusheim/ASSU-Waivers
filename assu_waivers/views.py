@@ -1,18 +1,11 @@
-import codecs
-import csv
-import random
 from datetime import datetime
-import StringIO
-from time import strftime
-from django.contrib.auth.decorators import login_required, user_passes_test
-from django.core.urlresolvers import reverse
-from django.db.models.aggregates import Sum, Avg
-from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import render_to_response, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.db.models.aggregates import Sum
+from django.shortcuts import render_to_response
 from django.template.context import RequestContext
-from assu_waivers.forms import WaiverForm, StudentUploadForm
-from assu_waivers.models import Fee, Term, Enrollment, FeeWaiver, Student
-from assu_waivers.services import GetTermForDate, GetStudentFromUser, prnText
+from assu_waivers.forms import WaiverForm
+from assu_waivers.models import Fee, Enrollment, FeeWaiver
+from assu_waivers.services import GetTermForDate, GetStudentFromUser
 
 @login_required
 def index(request):

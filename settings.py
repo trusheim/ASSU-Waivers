@@ -91,7 +91,8 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'waivers.assu_waivers',
-    'waivers.webauth'
+    'waivers.webauth',
+    'waivers.waivers_api'
 )
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True

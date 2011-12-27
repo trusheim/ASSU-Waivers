@@ -1,0 +1,12 @@
+from django.conf.urls.defaults import patterns
+
+__author__ = 'trusheim'
+
+
+urlpatterns = patterns('waivers.waivers_api.views',
+    (r'^(?P<api_key>[\w\d-]+)/test/?$', 'test'),
+    (r'^(?P<api_key>[\w\d-]+)/fees/?$', 'getFees'),
+    (r'^(?P<api_key>[\w\d-]+)/terms/?$', 'getTerms'),
+    (r'^(?P<api_key>[\w\d-]+)/checkFee/?$', 'checkFeeStatus'),
+    (r'^.*?$', 'not_found')
+)
