@@ -30,7 +30,7 @@ class JsonResponse(object):
 
 
     def toHttpResponse(self):
-        self.content['status'] = self.status
+        self.content['api_status'] = self.status
         return HttpResponse(json.dumps(self.content,ensure_ascii=False), mimetype="application/json")
 
 
@@ -39,8 +39,8 @@ class JsonResponse(object):
         response = cls()
         response.status = STATUS['error']
         response.content = {
-            'error_code': code,
-            'error_message': message
+            'api_error_code': code,
+            'api_error_message': message
         }
         return response.toHttpResponse()
 
