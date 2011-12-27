@@ -24,7 +24,7 @@ class ApiPrivilege(models.Model):
     key = models.ForeignKey(ApiKey)
 
     def __unicode__(self):
-        return "%s... for %s" % (self.key.key[:10],self.privilege)
+        return "%s for %s" % (self.privilege, self.key)
 
     class Meta:
         unique_together = ('privilege','key')
