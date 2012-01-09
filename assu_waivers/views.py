@@ -53,6 +53,12 @@ def request(request):
             # logic to determine total amount of waivers, total possible amount
             possible = Fee.objects.filter(term=term,population=enrollment.population).aggregate(Sum('max_amount'))['max_amount__sum']
             total = FeeWaiver.objects.filter(fee__term=term,student=student).aggregate(Sum('amount'))['amount__sum']
+
+            if possible is None:
+                possible = 0
+            if total is None:
+                total = 0
+
             return render_to_response('waivers/complete.html',
                     {'date': datetime.now(),
                      'term': term,
