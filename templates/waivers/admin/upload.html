@@ -4,23 +4,45 @@
 Student enrollment upload
 {% endblock %}
 {% block reportname %}
-    Student enrollment upload
+    Student enrollment upload: {{ term }}
 {% endblock %}
 
 {% block content %}
-    <h2>Student Enrollment Upload</h2>
-
-    <p><span class='bold'>Upload enrollment data for {{ term }}.</span></p>
-    <p>Ensure that all uploaded files do NOT have a header row, are in CSV format (File ... Save As in Microsoft Excel), and contain exactly
-    the people you wish to upload.</p>
+    <h2>Student Enrollment Upload: {{ term }}</h2>
+    <p>Please see below for important formatting information.</p>
     <hr />
 
-    <form method = 'POST' action='{% url assu_waivers.admin_views.importStudentCsv termName=term.short_name %}' enctype="multipart/form-data">
+    <form method = 'POST' action='{% url assu_waivers.admin_views.importStudentCsv termName=term.short_name %}' enctype="multipart/form-data;charset=utf-8" accept-charset="UTF-8">
     {% csrf_token %}
     {{ form.as_p }}
 
     <p>
-        <span style='font-weight:bold;'>THIS ACTION CANNOT BE UNDONE. Please be sure you are uploading the correct file!</span><br />
-        <input type='submit' value='Upload student enrollment data' /></p>
+        <span style='font-weight:bold;'>THIS ACTION CANNOT BE UNDONE. Please be sure you are uploading the correct files!</span><br />
+        <input type='submit' value='Upload student enrollment data' />
+    </p>
     </form>
+    
+    <hr />
+    <h3>Formatting information for uploaded files</h3>
+    <p><span style='font-weight:bold;'>Student Data CSV</span>:
+    <ul>
+        <li>No header row (the first row should be student information)</li>
+        <li>Column 1: Numeric SUID</li>
+        <li>Column 2: Student Name</li>
+        <li>Column 3: SUNetID (login name)</li>
+        <li>Column 4: Student Bill Category: UG, GR, GSB, MED, LAW are recognized. GR, GSB, MED, and LAW are all
+            considered "GR" (graduate fee)</li>
+        <li>Student records are stored with unique numeric SUID. If two records exist with the same SUID, the latter's
+        information (name, SUNetID, and billing category) will overwrite the former's. That is one reason
+        why there may be fewer students/enrollments reported inside the web tool than on the CSV itself.</li>
+        <li>Every student may only be assessed one fee (undergrad or grad).</li>
+    </ul></p>
+    <p><span style='font-weight:bold;'>Student Athlete CSV</span>:
+    <ul>
+        <li>No header row (the first row should be student information)</li>
+        <li>Column 1: Sport name (no specific format; this is actually discarded)</li>
+        <li>Column 2: Student Name</li>
+        <li>Column 3: SUNetID (login name)</li>
+        <li>The tool will look for a student with the SUNetID reported in the third column, and set the "no waivers" flag.</li>
+    </ul></p>
 {% endblock %}

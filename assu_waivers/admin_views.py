@@ -245,7 +245,7 @@ def importStudentCsv(request, termName):
     """
     Student CSV format: SUID, Name, SUNetID, Bill Category
         - Bill Category: UG, GR, [GSB, MED, LAW] (all considered GR)
-        - WILL NEED TO BE CHANGED FOR WINTER QUARTER
+        - WILL NEED TO BE CHANGED FOR WINTER QUARTER [I can't remember why I said this, and I don't think it's true]
     Athletic people CSV format: sport, name, SUID
         - Sport and name are discarded
     """
@@ -277,12 +277,22 @@ def importStudentCsv(request, termName):
 
     try:
 
-        csv_file = request.FILES['csv']
-        lines = []
-        for chunk in csv_file.chunks():
-            lines += chunk.splitlines()
+        content_raw = request.FILES['csv'].read()
+        content = ""
+        success_encoding = None
+        for encoding in ['utf-8','latin_1','ascii','utf-16']:
+            try:
+                content_raw.decode(encoding)
+                success_encoding = encoding
+                break
+            except Exception:
+                pass
+        if success_encoding is None:
+            raise Exception("Student data file was not encoded in a compatible character set.")
 
-        reader = csv.reader(lines)
+        print success_encoding
+        request.FILES['csv'].open()
+        reader = csv.reader(codecs.EncodedFile(request.FILES['csv'],success_encoding))
         num_updated = 0
 
         for student_record in reader:
@@ -292,7 +302,7 @@ def importStudentCsv(request, termName):
             student = Student.objects.get_or_create(suid=student_record[0],
                                                     defaults={'sunetid': student_record[2].lower(), 'name': "UNKNOWN",'no_waiver': no_waivers})
             student = student[0]
-            student.name = unicode(student_record[1],'utf-8')
+            student.name = student_record[1].decode(success_encoding)
             student.no_waiver = no_waivers
             student.save()
 
@@ -301,6 +311,7 @@ def importStudentCsv(request, termName):
 
         return render_to_response('waivers/admin/upload_done.html',{'num': num_updated, 'term': term}, context_instance=RequestContext(request))
     except Exception as e:
+        print e
         return render_to_response('waivers/admin/upload_done.html',{'error': e}, context_instance=RequestContext(request))
 
 @login_required
