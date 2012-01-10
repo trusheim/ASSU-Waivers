@@ -27,7 +27,7 @@ def error(request,message):
 def about(request):
     return render_to_response('waivers/about.html', None, context_instance=RequestContext(request))
 
-
+@login_required
 def request(request):
     term = GetTermForDate(datetime.now())
     if term is None:
