@@ -1,4 +1,5 @@
 import re
+from django.contrib.auth.decorators import user_passes_test, login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 import urllib2
@@ -56,10 +57,17 @@ def login(request):
             next = next[1:]
 
         return HttpResponseRedirect(settings.BASE_URL + next)
-    
+
+@login_required
 def logout(request):
     WebauthLogout(request)
     return HttpResponseRedirect('/')
 
+@login_required
 def whoami(request):
     return HttpResponse("You are logged in as %s" % request.user.username)
+
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+def changeme(request,newsunet):
+    request.session['wa_username'] = newsunet
