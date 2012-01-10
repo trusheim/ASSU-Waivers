@@ -7,5 +7,8 @@ class WebauthMiddleware(object):
         if not request.session.has_key('wa_username'):
             request.user = AnonymousUser()
         else:
-            request.user = WebauthUser.objects.get(username__exact=request.session['wa_username'])
+            try:
+                request.user = WebauthUser.objects.get(username__exact=request.session['wa_username'])
+            except WebauthUser.DoesNotExist:
+                request.user = AnonymousUser()
         return None

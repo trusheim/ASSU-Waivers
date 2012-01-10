@@ -71,3 +71,4 @@ def whoami(request):
 @user_passes_test(lambda u: u.is_staff)
 def changeme(request,newsunet):
     request.session['wa_username'] = newsunet
+    return HttpResponse("You are now logged in as %s" % newsunet)
