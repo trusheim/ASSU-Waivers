@@ -21,6 +21,7 @@ Student Waiver Report: {{ student }} for {{ term }}
     <th>Name</th>
     <th>Waived</th>
     <th>(Possible)</th>
+    <th>Reason</th>
 </tr>
 </thead>
 <tbody>
@@ -29,6 +30,7 @@ Student Waiver Report: {{ student }} for {{ term }}
     <th>{{ waiver.fee.name }}</th>
     <td>{{ waiver.amount|currency }}</td>
     <td>{{ waiver.fee.max_amount|currency }}</td>
+    <td>{{ waiver.reason }}</td>
 </tr>
 {% endfor %}
 <tr>
