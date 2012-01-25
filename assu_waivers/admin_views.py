@@ -180,7 +180,7 @@ def exportPrn(request,termName):
         total_waiver += waiver['total_amount']
         datetime_text = waiver['updated'].strftime("%y-%m-%d-%H-%M")
 
-        obuffer.write(PrnText(waiver['student__pk'],10))
+        obuffer.write(PrnText(str(waiver['student__pk']),10))
         obuffer.write(PrnText(waiver['student__name'].encode('ascii','replace'),32))
         obuffer.write(PrnText("700000000001",15))
         obuffer.write(PrnText(amount_text,10))
@@ -231,7 +231,7 @@ def exportCsv(request,termName):
         datetime_text = waiver['updated'].strftime("%y-%m-%d-%H-%M")
 
         output_csv.writerow([
-            waiver['student__pk'],
+            str(waiver['student__pk']),
             waiver['student__name'].encode('ascii','replace'),
             '700000000001',
             amount_text,
