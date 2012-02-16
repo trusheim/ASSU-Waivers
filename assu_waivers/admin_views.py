@@ -26,7 +26,12 @@ def bygroupTermReport(request,termName):
     term = get_object_or_404(Term,short_name=termName)
 
     fees = Fee.objects.filter(term=term)
-    total_waiver = [0,0] # removing Law
+    total_waiver = [0,0]
+    total_enrollment = [0,0]
+
+    total_enrollment[0] = Enrollment.objects.filter(term=term,population=0).count() + 1 # + 1 to avoid div errors
+    total_enrollment[1] = Enrollment.objects.filter(term=term,population=1).count() + 1 # + 1 to avoid div errors
+
     for fee in fees:
         total = fee.feewaiver_set.aggregate(Sum('amount'))['amount__sum']
         if total is None:
@@ -40,11 +45,7 @@ def bygroupTermReport(request,termName):
 
         count = fee.feewaiver_set.count()
 
-        total_enrollment = Enrollment.objects.filter(term=fee.term,population=fee.population).count()
-        if total_enrollment == 0:
-            total_enrollment = 1 # hacktastical, prevent div by 0 errors
-
-        pct = count / float(total_enrollment) * 100.0
+        pct = count / float(total_enrollment[fee.population]) * 100.0
         avg_pct = average / fee.max_amount * 100.0
 
         fee_info.append({'fee': fee,
@@ -55,9 +56,11 @@ def bygroupTermReport(request,termName):
                          'avg_pct': avg_pct
         })
 
-    num_waivers = [0,0]
+    num_waivers = [0,0,0.0,0.0]
     num_waivers[0] = FeeWaiver.objects.filter(fee__term=term,fee__population=0).values('student__pk','student__sunetid','student__name').distinct().count()
     num_waivers[1] = FeeWaiver.objects.filter(fee__term=term,fee__population=1).values('student__pk','student__sunetid','student__name').distinct().count()
+    num_waivers[2] = float(num_waivers[0]) / float(total_enrollment[0]) * 100.0
+    num_waivers[3] = float(num_waivers[1]) / float(total_enrollment[1]) * 100.0
 
 
     return render_to_response('waivers/admin/group_termreport.html',{
