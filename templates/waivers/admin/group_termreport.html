@@ -14,10 +14,10 @@ Group waiver reports
     <h3>Totals</h3>
     <table>
     <thead>
-    <tr><td>Population</td><td>Total Waived</td><td>Number of Waivers</td></tr>
+    <tr><td>Population</td><td>Total Waived</td><td>Number of Waivers</td><td>(% of population)</td></tr>
     </thead>
-    <tr><td style="font-weight:bold;">Undergraduate</td><td>{{ aggregate.0|currency }}</td><td>{{ num.0 }}</td></tr>
-    <tr><td style="font-weight:bold;">Graduate</td><td>{{ aggregate.1|currency }}</td><td>{{ num.1 }}</td></tr>
+    <tr><td style="font-weight:bold;">Undergraduate</td><td>{{ aggregate.0|currency }}</td><td>{{ num.0 }}</td><td>{{ num.2|floatformat:1 }}%</td></tr>
+    <tr><td style="font-weight:bold;">Graduate</td><td>{{ aggregate.1|currency }}</td><td>{{ num.1 }}</td><td>{{ num.3|floatformat:1 }}%</td></tr>
     </table>
 
     <h3>Fee Summaries</h3>
