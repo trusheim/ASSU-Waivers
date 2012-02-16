@@ -60,6 +60,29 @@ def checkFeeStatus(request,api_key):
 
     return JsonResponse(response).toHttpResponse()
 
+# viewStudent is like master power.
+# add viewFee-SPECIFIC, then viewFee-(fee ID) for individual access
+@requirePrivilege(('viewStudent','viewFee-SPECIFIC'))
+@api
+def getWaiversList(request,api_key):
+    feeId = request.GET.get('fee')
+    fee = get_object_or_404(Fee,pk=feeId)
+
+    # permissions checking (more fine-grained)
+    if not nameHasPrivilege(api_key,'viewStudent'):
+        if not nameHasPrivilege(api_key,'viewFee-%d' % fee.pk):
+            return JsonResponse.BadApiKeyError()
+
+    waivers = fee.feewaiver_set.all()
+    sunetids = [waiver.student.sunetid for waiver in waivers]
+
+    response = {
+        'fee': fee.pk,
+        'waivers': sunetids
+    }
+
+    return JsonResponse(response).toHttpResponse()
+
 @requirePrivilege('viewStudent')
 @api
 def viewStudent(request,api_key):
@@ -74,5 +97,5 @@ def viewStudent(request,api_key):
         'reason': waiver.reason
     } for waiver in waivers]
 
-    print waiversShort
     return JsonResponse({'waivers': waiversShort}).toHttpResponse()
+

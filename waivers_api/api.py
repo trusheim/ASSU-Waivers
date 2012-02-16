@@ -31,7 +31,9 @@ class JsonResponse(object):
 
     def toHttpResponse(self):
         self.content['api_status'] = self.status
-        return HttpResponse(json.dumps(self.content,ensure_ascii=False), mimetype="application/json")
+        response = HttpResponse(json.dumps(self.content,ensure_ascii=False), mimetype="application/json")
+        response['Access-Control-Allow-Origin'] = '*'
+        return response
 
 
     @classmethod
