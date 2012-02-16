@@ -28,6 +28,8 @@ def bygroupTermReport(request,termName):
     fees = Fee.objects.filter(term=term)
     total_waiver = [0,0]
     total_enrollment = [0,0]
+    avg_category_pct = [0.0,0.0]
+    category_count = [0.00001,0.00001] # div by 0 errors
 
     total_enrollment[0] = Enrollment.objects.filter(term=term,population=0).count() + 1 # + 1 to avoid div errors
     total_enrollment[1] = Enrollment.objects.filter(term=term,population=1).count() + 1 # + 1 to avoid div errors
@@ -48,6 +50,9 @@ def bygroupTermReport(request,termName):
         pct = count / float(total_enrollment[fee.population]) * 100.0
         avg_pct = average / fee.max_amount * 100.0
 
+        avg_category_pct[fee.population] += pct
+        category_count[fee.population] += 1
+
         fee_info.append({'fee': fee,
                          'total': total,
                          'average': average,
@@ -62,13 +67,17 @@ def bygroupTermReport(request,termName):
     num_waivers[2] = float(num_waivers[0]) / float(total_enrollment[0]) * 100.0
     num_waivers[3] = float(num_waivers[1]) / float(total_enrollment[1]) * 100.0
 
+    avg_category_pct[0] /= float(category_count[0])
+    avg_category_pct[1] /= float(category_count[1])
+
 
     return render_to_response('waivers/admin/group_termreport.html',{
         'groups': fee_info,
         'term':term,
         'date': datetime.now(),
         'aggregate': total_waiver,
-        'num': num_waivers
+        'num': num_waivers,
+        'category_pct': avg_category_pct,
     }, context_instance=RequestContext(request))
 
 @login_required
