@@ -12,7 +12,7 @@ Student enrollment upload
     <p>Please see below for important formatting information.</p>
     <hr />
 
-    <form method = 'POST' action='{% url assu_waivers.admin_views.importStudentCsv termName=term.short_name %}' enctype="multipart/form-data;charset=utf-8" accept-charset="UTF-8">
+    <form method = 'POST' action='{% url assu_waivers.admin_views.importStudentCsv termName=term.short_name %}' enctype="multipart/form-data" accept-charset="UTF-8">
     {% csrf_token %}
     {{ form.as_p }}
 

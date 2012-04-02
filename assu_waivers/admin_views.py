@@ -290,7 +290,6 @@ def importStudentCsv(request, termName):
     try:
 
         content_raw = request.FILES['csv'].read()
-        content = ""
         success_encoding = None
         for encoding in ['utf-8','latin_1','ascii','utf-16']:
             try:
@@ -302,7 +301,6 @@ def importStudentCsv(request, termName):
         if success_encoding is None:
             raise Exception("Student data file was not encoded in a compatible character set.")
 
-        print success_encoding
         request.FILES['csv'].open()
         reader = csv.reader(codecs.EncodedFile(request.FILES['csv'],success_encoding))
         num_updated = 0
@@ -323,7 +321,6 @@ def importStudentCsv(request, termName):
 
         return render_to_response('waivers/admin/upload_done.html',{'num': num_updated, 'term': term}, context_instance=RequestContext(request))
     except Exception as e:
-        print e
         return render_to_response('waivers/admin/upload_done.html',{'error': e}, context_instance=RequestContext(request))
 
 @login_required
