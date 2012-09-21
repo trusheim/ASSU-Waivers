@@ -24,6 +24,7 @@ Student enrollment upload
     
     <hr />
     <h3>Formatting information for uploaded files</h3>
+    <p>ALWAYS export files from Microsoft Excel in "MS-DOS Comma Separated" format.</p>
     <p><span style='font-weight:bold;'>Student Data CSV</span>:
     <ul>
         <li>No header row (the first row should be student information)</li>
@@ -42,7 +43,7 @@ Student enrollment upload
         <li>No header row (the first row should be student information)</li>
         <li>Column 1: Sport name (no specific format; this is actually discarded)</li>
         <li>Column 2: Student Name</li>
-        <li>Column 3: SUNetID (login name)</li>
+        <li>Column 3: Numeric SUID</li>
         <li>The tool will look for a student with the SUNetID reported in the third column, and set the "no waivers" flag.</li>
     </ul></p>
 {% endblock %}
