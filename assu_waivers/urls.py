@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 
-urlpatterns = patterns('waivers.assu_waivers',
+urlpatterns = patterns('assu_waivers',
     (r'^$', 'views.index'),
     (r'^about/$', 'views.about'),
     (r'^request/$', 'views.request'),

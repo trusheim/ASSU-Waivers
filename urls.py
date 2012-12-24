@@ -10,7 +10,7 @@ urlpatterns = patterns('',
            {'document_root': settings.MEDIA_ROOT}),
     (r'^admin/', include(admin.site.urls)),
     (r'^webauth/', include('webauth.urls')),
-    (r'^api/', include('waivers.waivers_api.urls')),
-    (r'^', include('waivers.assu_waivers.urls')),
+    (r'^api/', include('waivers_api.urls')),
+    (r'^', include('assu_waivers.urls')),
 
 )
