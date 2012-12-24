@@ -4,5 +4,5 @@ urlpatterns = patterns('webauth.views',
     (r'^logout/$', 'logout'),
     (r'^login/$','login'),
     (r'^whoami$','whoami'),
-    (r'^changeme/(?P<newsunet>[\w\d-]+)','changeme'),
+    #(r'^changeme/(?P<newsunet>[\w\d-]+)','TEST_changeme'),
 )
