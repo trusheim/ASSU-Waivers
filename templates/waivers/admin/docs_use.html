@@ -1,0 +1,133 @@
+{% extends 'waivers/admin/report_base.html' %}
+
+{% block title %}
+    Term name information
+{% endblock %}
+{% block reportname %}
+    Term name information
+{% endblock %}
+
+{% block content %}
+<h2>Fee Waiver Portal Administrator Documentation</h2>
+<p>Welcome, refunds coordinator and ASSU Financial Manager! This fee waiver portal is a tool that will hopefully
+    be useful to you in managing the required fee waiver process. This portal was developed to help the
+process that was developed in the 2010-11 school year for waivers, which we'll describe below.</p>
+
+<h3>A brief overview of the waivers process</h3>
+    <ol>
+    <li>Well before the quarter starts, the Student Services Center (SSC) works with the ASSU Financial Manager
+    to be sure that we have a strong working relationship and that any changes to the process are documented
+    and understood by all parties. For instance, for fall quarter, this needs to happen in early August.</li>
+    <li>Create the quarter in the waivers system</li>
+    <li>Add the fees that were for the quarter into the waivers system. Take this data from the ASSU Fee Budget
+    and make sure the numbers used in the waivers system are the amounts actually collected for the group.</li>
+    <li>Receive the list of students and the list of athletes from the SSC</li>
+    <li>Upload those files into the waivers system</li>
+    <li>Complete all these steps 2-3 days before the opening of the quarter to make sure that everything is done
+    well in advance!</li>
+    </ol>
+
+<h3>How to: add an administrator into the waivers system</h3>
+    <p>If you need to add an administrator for the fee waivers system, do the following:
+        <ul>
+            <li>Go to the "Data administration" site using the links at the top of this page.</li>
+            <li>Click on "Users" under the "Auth" section.</li>
+            <li>Search for the SUNetID of the person that you want to make an administrator</li>
+            <li>Click on their username to open up their user details.</li>
+            <li>Under the "permissions" section, check "Staff status" and "Superuser status."</li>
+            <li>Save the user.</li>
+            <li>The user should now be able to log into the fee waivers system just as you can. There
+            is no delay.</li>
+        </ul>
+    </p>
+
+<h3>How to: add a new quarter</h3>
+    <ul>
+    <li>Go to the "data administration" site using the links at the top of this page.</li>
+    <li>Under the "assu_waivers" section, click on "Terms."</li>
+    <li>In the upper-right, select "Add term."</li>
+    <li>Follow the instructions and examples to input the correct data.</li>
+    <li>Note that the waivers system will open automatically for users at the time specified, and will close
+    automatically at the time specified. No further action is necessary to open or close the waivers system.</li>
+    </ul>
+
+<h3>How to: Add fees into the quarter</h3>
+<ul>
+<li>Go to the "data administration" site using the links at the top of this page.</li>
+<li>Under the "assu_waivers" section, click on Fees</li>
+<li>In the upper-right, select "Add fee."</li>
+<li>Fill in the correct information for the fee. Make sure you select the correct quarter.</li>
+<li>Click "Save," or click "Save and add another" to make things faster.</li>
+</ul>
+
+<h3>How to: Upload the student enrollment information into the system</h3>
+<p>The student enrollment information is critical to the system because it determines which students can receive
+waivers, and which population they are (since we charge different fees to grads and undergrads.) To avoid having to
+manually enter students, we've developed an automatic uploader that uses a format agreed upon between us and SSC.</p>
+
+<p>Before you upload the data, there is NO NEED to edit the content of the SSC files. Never delete students; never
+add students; don't adjust their information or anything silly like that. The system is setup to handle the special cases
+through the online tool, and you will actually break the online tool somewhat if you edit the content of the files. You
+may need to edit the structure or formatting of the file, however, to make sure it matches the specifications below.</p>
+    <ul>
+    <li>Go to the "Waiver reports" site using the links at the top of this page.</li>
+    <li>Find the current quarter, then on the right side, click on "Upload student enrollment information."</li>
+    <li>READ THE TEXT AT THE BOTTOM OF THE PAGE OR EVERYTHING CAN BREAK!</li>
+    <li>Specifically, ensure that the files are formatted EXACTLY as specified in that text. If you mess up the formatting,
+    it's possible that we'll have a ton of really weird data in the database that's impossible to get rid of. But if you
+    do mess up, check out the "how to: delete a quarter" below.</li>
+    <li>Format the SSC files exactly as specified in that text. This has taken three bullets. It's really important. As
+    it says in the text, export the files from Microsoft Excel as "Windows Comma Separated" (on Mac.)</li>
+    <li>Select the files in the tool, and click "Upload student enrollment data." The system will chug for a while - don't
+    interrupt it! You will see a success message when it is done.</li>
+    <li>Under the hood, the system (1) ensures that a "Student" record exists with the specified SUID number, (2) adds
+    an "Enrollment" record for the specified student in the current quarter, and then (3) checks if the student needs
+    to have a "no waivers" flag set because their SUID number is in the "athletes" file.</li>
+    </ul>
+
+<h3>How to: delete a quarter if something went terribly wrong</h3>
+    <p>The only time something would go terribly wrong that I can think of is if you somehow uploaded the wrong student
+    list into the quarter. However, if anything goes terribly wrong and you just want to start over...</p>
+    <ul>
+        <li>Go to the "data administration" site using the links at the top of this page.</li>
+        <li>Under the "assu_waivers" section, click on "Terms."</li>
+        <li>Click on the current quarter, the one that is messed up.</li>
+        <li>In the bottom-left, click on "Delete."</li>
+        <li>The system will ask if you really want to delete the term, and all its associated records. If you really do,
+        click on "Yes, I'm sure."</li>
+    </ul>
+
+<h3>How to: access interesting reports</h3>
+    <ul>
+        <li>Go to the "waiver reports" site using the links at the top of this page</li>
+        <li>Select the quarter you want to view reports for, and enjoy.</li>
+    </ul>
+    <p>The "per-group and aggregate report" is the main report that the ASSU Financial Manager might want to see. It
+    lists the amounts that were waived, and gives links to group-specific reports (both internal reports for the FM,
+    and the reports that can be printed and given to group officers.)</p>
+    <p>Note that the "Group JBL" report is not actually public, and group officers are not actually able to view
+    that page. To give that report to a group, you will have to print the page to a PDF and send the group the PDF.</p>
+    <p>The "per-student" report is provided in case a student has inquiries about their waivers. There is no search
+    function, but I recommend using Command+F in your browser to find a SUNetID or SUID # if you need.</p>
+
+<h3>How to: do more powerful administration</h3>
+    <p>The "data administration" site has full control over all the data inside the waivers system, and can be used
+    to administrate literally everything. If unusual situations come up and require you to work in-depth, you can use
+    that site to look at all the data, delete records, or add records as needed.</p>
+    <p>Adding/deleting a fee waiver: this can be accomplished by adding/deleting a "Fee Waiver" object. You can search
+    by SUNetID or fee name for existing waivers, filter by quarter, and add records if you need.</p>
+    <p>Adding/deleting a student, or changing their "no waivers allowed" flag: there are two sets of records about
+    students: their Student record, and their Enrollment records. The Student record contains information linking their
+    SUNetID to their SUID # (SUNetID is required to login, and SUID # is required by SSC), the flag that says whether
+    or not they are allowed seek waivers, and other information that will stay constant about a student. The Enrollment
+    records are short records that just say "Student X is enrolled as a Y (grad/undergrad) in Quarter Z."</p>
+    <p>For instance, if SSC requests to see the waivers system as an undergraduate, you will add a Student record with
+    a dummy SUID # and the SUNetID of the person who wants to see it, then add an Enrollment record for that student to
+    as an undergraduate for the quarter.</p>
+
+<h3>More information; the developer</h3>
+
+    <p>This application was developed by Stephen Trusheim - <a href="mailto:stephen@trushe.im">stephen@trushe.im</a>.
+        Its source is available at <a href="http://github.com/trusheim">http://github.com/trusheim</a>. If something
+    totally unexpected comes up, let me know.</p>
+{% endblock %}
