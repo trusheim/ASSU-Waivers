@@ -4,11 +4,15 @@
 <div class='color-box' style='width:80%; margin: 0 auto;'>
 
     {% if message == 'notstudent' %}
-    <p class="last">You are not currently registered as a student, and are ineligible to receive a fee waiver.</p>
+    <p>You are not currently registered as a student, and are ineligible to receive a fee waiver.</p>
     {% endif %}
 
     {% if message == 'nowaiver' %}
-    <p class='last'>You are not eligible to receive a fee waiver.</p>
+    <p>You are recognized as a student, but are not eligible to receive a fee waiver. This is likely
+    because you are on an NCAA full-ride scholarship.</p>
     {% endif %}
+
+<p class="last">If you have received this message in error, please contact the ASSU Financial Manager at
+<a href="mailto:fm@assu.stanford.edu">fm@assu.stanford.edu</a>.</p>
 </div>
 {% endblock %}
