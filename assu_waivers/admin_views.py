@@ -148,91 +148,31 @@ def bygroupTermListReport(request,termName,groupId,public=False):
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)
-def exportPrn(request,termName):
-    """
-    PRN is just space-delimited text (i.e., there is a field width, and we either truncate or pad with spaces until we are that length.)
-    File format, per the SSC on Sep 1 2011:
-    No header column
-    File must be left justified
-    Amount Format	2 decimal places, no comma separator
-    A	Emplid	[ST: SUID] column width 10
-    B	Name	column width 32
-    C	Item Type [ST: ????]	column width 15
-    D	Amount	column width 10
-    E	Term	column width 5
-    F	Reference (optional)	column width 15
-    Total Number of Records
-    Total Amount
-    """
-    term = get_object_or_404(Term,short_name=termName)
-
-    output = StringIO.StringIO()
-    obuffer = codecs.getwriter("utf-8")(output)
-
-    total_waiver = 0
-    num_reqs = 0
-    waivers = FeeWaiver.objects.filter(fee__term=term).values('student__pk','student__sunetid','student__name','updated').annotate(total_amount=Sum('amount'))
-
-    # each waiver: requested values
-    for waiver in waivers:
-        num_reqs += 1
-        amount_text = "%.2f" % waiver['total_amount']
-        total_waiver += waiver['total_amount']
-        datetime_text = waiver['updated'].strftime("%y-%m-%d-%H-%M")
-
-        obuffer.write(PrnText(str(waiver['student__pk']),10))
-        obuffer.write(PrnText(waiver['student__name'].encode('ascii','replace'),32))
-        obuffer.write(PrnText("700000000001",15))
-        obuffer.write(PrnText(amount_text,10))
-        obuffer.write(PrnText(term.short_name,5))
-        obuffer.write(PrnText(datetime_text,15))
-        obuffer.write("\n")
-
-    # end line: number of records and total amount
-    obuffer.write(PrnText(str(num_reqs),10))
-    obuffer.write(PrnText('',32))
-    obuffer.write(PrnText('',15))
-    obuffer.write(PrnText("%.2f" % total_waiver,10))
-    obuffer.write(PrnText('',5))
-    obuffer.write(PrnText('',15))
-
-    final = output.getvalue()
-    output.close()
-
-    filename =  "%s_ASSU_WAIVERS_%s.dat" % (strftime("%Y_%m_%d"), str(term.short_name).upper())
-
-    #response = HttpResponse()
-    response = HttpResponse(mimetype='application/octet-stream')
-    response['Content-Disposition'] = 'attachment; filename=%s' % filename
-    response.write(final)
-
-    return response
-
-@login_required
-@user_passes_test(lambda u: u.is_staff)
 def exportCsv(request,termName):
     term = get_object_or_404(Term,short_name=termName)
 
+    datetime_text = datetime.now().strftime("%y-%m-%d-%H-%M")
+
     output = StringIO.StringIO()
+    output.truncate(0) # sometimes stringIO is left over from the previous session, idk why
     obuffer = codecs.getwriter("utf-8")(output)
     output_csv = csv.writer(obuffer)
 
     total_waiver = 0
     num_reqs = 0
-    waivers = FeeWaiver.objects.filter(fee__term=term).values('student__pk','student__sunetid','student__name','updated').annotate(total_amount=Sum('amount'))
+    waivers = FeeWaiver.objects.filter(fee__term=term).values('student__pk',).annotate(total_amount=Sum('amount'))
 
-    output_csv.writerow([unicode('SUID'),unicode('Name'),unicode('Type'),
-                         unicode('Total Waiver'),unicode('Term'),unicode('Reference Date')])
+    output_csv.writerow([u'SUID',u'Name',u'Type', u'Total Waiver',u'Term',u'Reference Date'])
 
     for waiver in waivers:
         num_reqs += 1
+        student_info = Student.objects.get(pk=waiver['student__pk'])
         amount_text = "%.2f" % waiver['total_amount']
         total_waiver += waiver['total_amount']
-        datetime_text = waiver['updated'].strftime("%y-%m-%d-%H-%M")
 
         output_csv.writerow([
             str(waiver['student__pk']),
-            waiver['student__name'].encode('ascii','replace'),
+            student_info.name.encode('ascii','replace'),
             '700000000001',
             amount_text,
             term.short_name,
@@ -244,7 +184,6 @@ def exportCsv(request,termName):
 
     filename =  "%s_ASSU_WAIVERS_%s.csv" % (strftime("%Y_%m_%d"), str(term.short_name).upper())
 
-    #response = HttpResponse()
     response = HttpResponse(mimetype='text/csv')
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
     response.write(final)
@@ -327,3 +266,8 @@ def importStudentCsv(request, termName):
 @user_passes_test(lambda u: u.is_staff)
 def termInfoSheet(request):
     return render_to_response('waivers/admin/term_info.html',{}, context_instance=RequestContext(request))
+
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+def docs(request):
+    return render_to_response('waivers/admin/docs_use.html',{}, context_instance=RequestContext(request))
