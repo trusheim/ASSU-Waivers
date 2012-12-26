@@ -6,8 +6,8 @@ POPULATIONS = ((0, "Undergraduate"), (1, "Graduate"), )
 class Term(models.Model):
     short_name = models.SlugField(max_length=5,blank=False, verbose_name="Term", help_text="SSC short code for the quarter - see <a href ='/reports/term_info'>this document</a>")
     long_name = models.CharField(max_length=128, blank=False, verbose_name="Term name", help_text="e.g. Winter 2010-2011")
-    refund_opens = models.DateTimeField(blank=False, verbose_name="Date/time this waiver period opens", help_text="8:00 AM on the first day of the quarter")
-    refund_closes = models.DateTimeField(blank=False, verbose_name="Date/time this waiver period closes", help_text="5:00 PM on the second Friday of the quarter")
+    refund_opens = models.DateTimeField(blank=False, verbose_name="Date/time this waiver period opens", help_text="8:00 AM on the first day of the quarter. The system will automatically open at this date/time.")
+    refund_closes = models.DateTimeField(blank=False, verbose_name="Date/time this waiver period closes", help_text="5:00 PM on the second Friday of the quarter. The system will automatically close at this date/time.")
 
     def __unicode__(self):
         return self.long_name
@@ -15,7 +15,7 @@ class Term(models.Model):
 class Student(models.Model):
     suid = models.CharField(max_length=8, primary_key=True, verbose_name="SUID #", help_text="e.g. 05555555")
     sunetid = models.CharField(max_length=8, verbose_name='SUNetID',help_text="e.g. joeblow")
-    name = models.CharField(max_length=128, verbose_name='Full Name',help_text="e.g. Joe Q Blow")
+    name = models.CharField(max_length=128, verbose_name='Full Name',help_text="e.g. Blow,Joe Q")
     no_waiver = models.BooleanField(default=False, verbose_name="No Waivers Allowed", help_text="This student may not receive any waivers (e.g., because he/she is an NCAA athlete)")
     terms = models.ManyToManyField(Term,through="Enrollment")
 

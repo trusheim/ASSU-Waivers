@@ -14,12 +14,13 @@ urlpatterns = patterns('assu_waivers',
     (r'^reports/group/(?P<termName>[\w\d-]+)/(?P<groupId>[\d]+)/?$', 'admin_views.bygroupTermListReport', {'public': False}, 'groupreport_private'),
     (r'^reports/group/(?P<termName>[\w\d-]+)/(?P<groupId>[\d]+)/public/?$', 'admin_views.bygroupTermListReport', {'public': True}, 'groupreport_public'),
 
-    (r'^reports/export/(?P<termName>[\w\d-]+)/prn/$', 'admin_views.exportPrn'),
     (r'^reports/export/(?P<termName>[\w\d-]+)/csv/$', 'admin_views.exportCsv'),
 
     (r'^reports/upload/(?P<termName>[\w\d-]+)/$', 'admin_views.importStudentCsv'),
 
-    (r'^reports/term_info$', 'admin_views.termInfoSheet'),
+    (r'^reports/term_info/$', 'admin_views.termInfoSheet'),
+    (r'^reports/docs/$', 'admin_views.docs'),
+
 
 
 )
