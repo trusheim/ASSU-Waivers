@@ -10,13 +10,14 @@ students to waive individual components of that fee if a student objects to a gr
 etc.
 
 This website enables the refunds process for each student. Key features:
-    - WebAuth protection for all areas; admin panel, waiver requests, etc (using my trusheim/webauth project)
-    - Follows requirements (set by ASSU Joint Bylaws) that every student can request a waiver of each fee,
-    or any part thereof
-    - Follows Stanford regulations that some students (e.g. students w/ NCAA scholarship) cannot waive any fees.
-    - Export to formats that everyone cares about (CSV)
-    - API for other apps to integrate: see if a student has refunded a fee or not.
-    - Reasonably good documentation (working on API docs.)
+
+- WebAuth protection for all areas; admin panel, waiver requests, etc (using my trusheim/webauth project)
+- Follows requirements (set by ASSU Joint Bylaws) that every student can request a waiver of each fee,
+or any part thereof
+- Follows Stanford regulations that some students (e.g. students w/ NCAA scholarship) cannot waive any fees.
+- Export to formats that everyone cares about (CSV)
+- API for other apps to integrate: see if a student has refunded a fee or not.
+- Reasonably good documentation (working on API docs.)
 
 ##By##
 Stephen Trusheim (tru@assu.stanford.edu / stephen@trushe.im).
