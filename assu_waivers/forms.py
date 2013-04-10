@@ -5,6 +5,7 @@ from assu_waivers.models import FeeWaiver, Fee
 
 __author__ = 'trusheim'
 
+
 class WaiverForm(forms.Form):
     fee = None
     student = None
@@ -13,16 +14,16 @@ class WaiverForm(forms.Form):
     reason_morally = forms.BooleanField(required=False)
     reason_value = forms.BooleanField(required=False)
     reason_other = forms.BooleanField(required=False)
-    reason_other_expository = forms.CharField(required=False,initial="")
+    reason_other_expository = forms.CharField(required=False, initial="")
 
-    def __init__(self,fee, student,*args,**kwargs):
-        super(WaiverForm,self).__init__(*args,**kwargs)
+    def __init__(self, fee, student, *args, **kwargs):
+        super(WaiverForm, self).__init__(*args, **kwargs)
         self.fee = fee
         self.student = student
-        self.waiver_amount = forms.FloatField(self.fee.max_amount,0)
+        self.waiver_amount = forms.FloatField(self.fee.max_amount, 0)
         self.initial['waiver_amount'] = 0
 
-    def set_current(self,waiver):
+    def set_current(self, waiver):
         self.initial['waiver_amount'] = waiver.amount
         self.initial['reason_other'] = True
         self.initial['reason_other_expository'] = waiver.reason
@@ -35,16 +36,15 @@ class WaiverForm(forms.Form):
             return self.cleaned_data # no more validation needed if no waiver
 
         if not (self.cleaned_data.get('reason_burden') or self.cleaned_data.get('reason_morally') or \
-            self.cleaned_data.get('reason_value') or self.cleaned_data.get('reason_other')):
-
+                    self.cleaned_data.get('reason_value') or self.cleaned_data.get('reason_other')):
             raise forms.ValidationError("You must select a reason to request a waiver from this fee.")
 
-        if self.cleaned_data.get('reason_other') and \
-            (not self.cleaned_data.get('reason_other_expository') or self.cleaned_data.get("reason_other_expository") is None
-                or self.cleaned_data.get("reason_other_expository") == ""):
-
+        if self.cleaned_data.get('reason_other') \
+            and (not self.cleaned_data.get('reason_other_expository')
+                 or self.cleaned_data.get("reason_other_expository") is None
+                 or self.cleaned_data.get("reason_other_expository") == ""):
             raise forms.ValidationError("Please provide an 'other' reason.")
-        
+
         return self.cleaned_data
 
     def save(self):
@@ -63,7 +63,7 @@ class WaiverForm(forms.Form):
 
         # save new fee waiver if required
         if self.cleaned_data.get('waiver_amount') > 0:
-            waiver = FeeWaiver.objects.get_or_create(student=self.student,fee=self.fee, defaults={'amount': new_amount})[0]
+            waiver = FeeWaiver.objects.get_or_create(student=self.student, fee=self.fee, defaults={'amount': new_amount})[0]
             waiver.amount = new_amount
             waiver.reason = reasons
             waiver.save()
@@ -76,38 +76,39 @@ class WaiverForm(forms.Form):
             except FeeWaiver.DoesNotExist:
                 pass
 
-        # if they set 0 and had 0 before, don't make a new waiver.
+                # if they set 0 and had 0 before, don't make a new waiver.
 
     @staticmethod
-    def get_list(enrollment,*args,**kwargs):
+    def get_list(enrollment, *args, **kwargs):
 
         # load up some datums
-        fees = Fee.objects.filter(term=enrollment.term,population=enrollment.population)
+        fees = Fee.objects.filter(term=enrollment.term, population=enrollment.population)
 
         # setup fee forms
         forms = []
         for fee in fees:
-            form = WaiverForm(fee,enrollment.student,prefix=str(fee.pk),*args,**kwargs)
+            form = WaiverForm(fee, enrollment.student, prefix=str(fee.pk), *args, **kwargs)
             waiver = fee.feewaiver_set.filter(student=enrollment.student)
             if waiver.count():
                 form.set_current(waiver.get())
             forms.append(form)
 
-        forms.sort(cmp=lambda x,y: x.fee.pk < y.fee.pk)
+        forms.sort(cmp=lambda x, y: x.fee.pk < y.fee.pk)
 
         return forms
 
     @staticmethod
-    def verify_list(list):
-        for form in list:
+    def verify_list(newlist):
+        for form in newlist:
             if not form.is_valid():
                 return False
         return True
 
     @staticmethod
-    def save_list(list):
-        for form in list:
+    def save_list(newlist):
+        for form in newlist:
             form.save()
+
 
 class StudentUploadForm(forms.Form):
     csv = forms.FileField(label="Student data CSV")
