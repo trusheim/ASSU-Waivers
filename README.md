@@ -19,6 +19,9 @@ or any part thereof
 - API for other apps to integrate: see if a student has refunded a fee or not.
 - Reasonably good documentation (working on API docs.)
 
+##Environment##
+Tested on Django 1.5.1. No other dependencies.
+
 ##By##
 Stephen Trusheim (tru@assu.stanford.edu / stephen@trushe.im).
 
