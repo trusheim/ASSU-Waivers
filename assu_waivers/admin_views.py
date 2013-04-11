@@ -10,6 +10,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
 from assu_waivers.forms import StudentUploadForm
 from assu_waivers.models import Term, Fee, Enrollment, FeeWaiver, Student
+from assu_waivers.exporter import exportTermToCSV, exportTermWaiversToExcel
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)
@@ -160,45 +161,31 @@ def bygroupTermListReport(request, termName, groupId, public=False):
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)
-def exportCsv(request, termName):
+def exportTermCsv(request, termName):
     term = get_object_or_404(Term, short_name=termName)
 
-    datetime_text = datetime.now().strftime("%y-%m-%d-%H-%M")
-
-    output = StringIO.StringIO()
-    output.truncate(0) # sometimes stringIO is left over from the previous session, idk why
-    obuffer = codecs.getwriter("utf-8")(output)
-    output_csv = csv.writer(obuffer)
-
-    total_waiver = 0
-    num_reqs = 0
-    waivers = FeeWaiver.objects.filter(fee__term=term).values('student__pk', ).annotate(total_amount=Sum('amount'))
-
-    output_csv.writerow([u'SUID', u'Name', u'Type', u'Total Waiver', u'Term', u'Reference Date'])
-
-    for waiver in waivers:
-        num_reqs += 1
-        student_info = Student.objects.get(pk=waiver['student__pk'])
-        amount_text = "%.2f" % waiver['total_amount']
-        total_waiver += waiver['total_amount']
-
-        output_csv.writerow([
-            str(waiver['student__pk']),
-            student_info.name.encode('ascii', 'replace'),
-            '700000000001',
-            amount_text,
-            term.short_name,
-            datetime_text
-        ])
-
-    final = output.getvalue()
-    output.close()
+    csv_contents = exportTermToCSV(term)
 
     filename = "%s_ASSU_WAIVERS_%s.csv" % (strftime("%Y_%m_%d"), str(term.short_name).upper())
 
     response = HttpResponse(mimetype='text/csv')
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
-    response.write(final)
+    response.write(csv_contents)
+
+    return response
+
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+def exportTermExcel(request, termName):
+    term = get_object_or_404(Term, short_name=termName)
+
+    excel_contents = exportTermWaiversToExcel(term)
+
+    filename = "%s_ASSU_WAIVERS_%s.xls" % (strftime("%Y_%m_%d"), str(term.short_name).upper())
+
+    response = HttpResponse(mimetype='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename
+    response.write(excel_contents)
 
     return response
 
