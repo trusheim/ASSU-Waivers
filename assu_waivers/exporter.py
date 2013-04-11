@@ -111,7 +111,7 @@ def exportFeeJBLSummaryToExcel(fee):
     pct_waived = float(waivers.count()) / float(total_enrollment) * 100.0
 
     wb = Workbook()
-    ms = wb.add_sheet('%s/%s' % (fee.term.pk, fee.pk))
+    ms = wb.add_sheet('Waivers %s-%s' % (fee.term.short_name, fee.pk))
 
     # header rows
     bold_style = XFStyle()
