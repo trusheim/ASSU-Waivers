@@ -20,7 +20,10 @@ or any part thereof
 - Reasonably good documentation (working on API docs.)
 
 ##Environment##
-Tested on Django 1.5.1. No other dependencies.
+Tested on Django 1.5.1. No external dependencies.
+
+##Includes##
+Includes [XLWT](https://github.com/python-excel/xlwt), licensed under LGPL as best I can tell.
 
 ##By##
 Stephen Trusheim (tru@assu.stanford.edu / stephen@trushe.im).
