@@ -10,7 +10,9 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
 from assu_waivers.forms import StudentUploadForm
 from assu_waivers.models import Term, Fee, Enrollment, FeeWaiver, Student
-from assu_waivers.exporter import exportTermToCSV, exportTermWaiversToExcel
+from assu_waivers.exporter import exportTermWaiversToCSV, exportTermWaiversToExcel, exportFeeJBLSummaryToExcel
+from assu_waivers.services import getTermStatistics
+
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)
@@ -24,71 +26,15 @@ def reportIndex(request):
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 def bygroupTermReport(request, termName):
-    fee_info = []
     term = get_object_or_404(Term, short_name=termName)
 
-    fees = Fee.objects.filter(term=term)
-    total_waiver = [0, 0]
-    total_enrollment = [0, 0]
-    avg_category_pct = [0.0, 0.0]
-    category_count = [0.000001, 0.000001]  # div by 0 errors
-
-    total_enrollment[0] = Enrollment.objects.filter(term=term, population=0).count()
-    total_enrollment[1] = Enrollment.objects.filter(term=term, population=1).count()
-    if total_enrollment[0] == 0:
-        total_enrollment[0] = 1 # div by zero error fix
-    if total_enrollment[1] == 0:
-        total_enrollment[1] = 1 # div by zero error fix
-
-
-
-    for fee in fees:
-        total = fee.feewaiver_set.aggregate(Sum('amount'))['amount__sum']
-        if total is None:
-            total = 0
-
-        total_waiver[fee.population] += total
-
-        average = fee.feewaiver_set.aggregate(Avg('amount'))['amount__avg']
-        if average is None:
-            average = 0
-
-        count = fee.feewaiver_set.count()
-
-        pct = count / float(total_enrollment[fee.population]) * 100.0
-        avg_pct = average / fee.max_amount * 100.0
-
-        avg_category_pct[fee.population] += pct
-        category_count[fee.population] += 1
-
-        fee_info.append({'fee': fee,
-                         'total': total,
-                         'average': average,
-                         'count': count,
-                         'pct': pct,
-                         'avg_pct': avg_pct
-        })
-
-    num_waivers = [0, 0, 0.0, 0.0]
-    num_waivers[0] = FeeWaiver.objects.filter(fee__term=term, fee__population=0).values('student__pk',
-                                                                                        'student__sunetid',
-                                                                                        'student__name').distinct().count()
-    num_waivers[1] = FeeWaiver.objects.filter(fee__term=term, fee__population=1).values('student__pk',
-                                                                                        'student__sunetid',
-                                                                                        'student__name').distinct().count()
-    num_waivers[2] = float(num_waivers[0]) / float(total_enrollment[0]) * 100.0
-    num_waivers[3] = float(num_waivers[1]) / float(total_enrollment[1]) * 100.0
-
-    avg_category_pct[0] /= float(category_count[0])
-    avg_category_pct[1] /= float(category_count[1])
+    stats = getTermStatistics(term)
 
     return render_to_response('waivers/admin/group_termreport.html', {
-        'groups': fee_info,
+        'groups': stats['fees'],
         'term': term,
         'date': datetime.now(),
-        'aggregate': total_waiver,
-        'num': num_waivers,
-        'category_pct': avg_category_pct,
+        'stats': stats
     }, context_instance=RequestContext(request))
 
 
@@ -165,12 +111,28 @@ def bygroupTermListReport(request, termName, groupId, public=False):
     }, context_instance=RequestContext(request))
 
 
+def bygroupTermListReportExcel(request, termName, groupId):
+    term = get_object_or_404(Term, short_name=termName)
+    fee = get_object_or_404(Fee, pk=groupId)
+
+    excel_contents = exportFeeJBLSummaryToExcel(fee)
+
+    filename = "%s_%d_GROUP_WAIVERS_%s.xls" % (str(term.short_name).upper(), fee.pk, strftime("%Y_%m_%d"),)
+
+    response = HttpResponse(mimetype='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename
+    response.write(excel_contents)
+
+    return response
+
+
+
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 def exportTermCsv(request, termName):
     term = get_object_or_404(Term, short_name=termName)
 
-    csv_contents = exportTermToCSV(term)
+    csv_contents = exportTermWaiversToCSV(term)
 
     filename = "%s_ASSU_WAIVERS_%s.csv" % (strftime("%Y_%m_%d"), str(term.short_name).upper())
 

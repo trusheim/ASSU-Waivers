@@ -21,7 +21,7 @@ Waiver reports
     {% for term in terms %}
     <tr>
         <td style='font-weight:bold;border-right:1px solid #ddd'>{{ term }}</td>
-        <td><a href="{% url 'assu_waivers.admin_views.bygroupTermReport' termName=term.short_name %}">Per-group and aggregate report</a></td>
+        <td style="border-right:1px solid #ddd"><a href="{% url 'assu_waivers.admin_views.bygroupTermReport' termName=term.short_name %}">Per-group and aggregate report</a></td>
         <td style="border-right:1px solid #ddd"><a href="{% url 'assu_waivers.admin_views.bystudentTermReport' termName=term.short_name %}">Per-student report</a></td>
         <td style="border-right:1px solid #ddd"><a href="{% url 'assu_waivers.admin_views.exportTermCsv' termName=term.short_name %}">CSV</a></td>
         <td style="border-right:1px solid #ddd"><a href="{% url 'assu_waivers.admin_views.exportTermExcel' termName=term.short_name %}">Excel</a></td>

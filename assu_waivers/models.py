@@ -1,7 +1,7 @@
 from django.db import models
 
 POPULATIONS = ((0, "Undergraduate"), (1, "Graduate"), )
-# removed Law because that's not used anymore
+
 
 class Term(models.Model):
     short_name = models.SlugField(max_length=5,blank=False, verbose_name="Term", help_text="SSC short code for the quarter - see <a href ='/reports/term_info'>this document</a>")
@@ -11,6 +11,7 @@ class Term(models.Model):
 
     def __unicode__(self):
         return self.long_name
+
 
 class Student(models.Model):
     suid = models.CharField(max_length=8, primary_key=True, verbose_name="SUID #", help_text="e.g. 05555555")
@@ -30,6 +31,7 @@ class Student(models.Model):
             return 1
         else:
             raise Exception("Unexpected registration status provided: %s" % status)
+
 
 class Enrollment(models.Model):
     student = models.ForeignKey(Student)
@@ -52,6 +54,7 @@ class Fee(models.Model):
 
     def __unicode__(self):
         return "%s (%s)" % (self.name,self.term)
+
 
 class FeeWaiver(models.Model):
     student = models.ForeignKey(Student)

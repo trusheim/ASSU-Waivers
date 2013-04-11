@@ -14,12 +14,12 @@ Group waiver reports
     <h3>Totals</h3>
     <table>
     <thead>
-    <tr><td>Population</td><td>Total Waived</td><td>Number of Waivers</td><td>(% of population)</td><td>Avg. % refunding from each group</td></tr>
+    <tr><td>Population</td><td>Total Waived</td><td>Number of Waivers</td><td>(% of population)</td><td>Enrollment</td></tr>
     </thead>
-    <tr><td style="font-weight:bold;">Undergraduate</td><td>{{ aggregate.0|currency }}</td><td>{{ num.0 }}</td>
-        <td>{{ num.2|floatformat:1 }}%</td><td>{{ category_pct.0|floatformat:1 }}%</td></tr>
-    <tr><td style="font-weight:bold;">Graduate</td><td>{{ aggregate.1|currency }}</td><td>{{ num.1 }}</td>
-        <td>{{ num.3|floatformat:1 }}%</td><td>{{ category_pct.1|floatformat:1 }}%</td></tr>
+    <tr><td style="font-weight:bold;">Undergraduate</td><td>{{ stats.total_ug|currency }}</td><td>{{ stats.num_waivers_ug }}</td>
+        <td>{{ stats.pct_waivers_ug|floatformat:2 }}%</td><td>{{ stats.enrollment_ug }}</td></tr>
+    <tr><td style="font-weight:bold;">Graduate</td><td>{{ stats.total_grad|currency }}</td><td>{{ stats.num_waivers_grad }}</td>
+        <td>{{ stats.pct_waivers_grad|floatformat:2 }}%</td><td>{{ stats.enrollment_grad }}</td></tr>
     </table>
 
     <h3>Fee Summaries</h3>
@@ -27,30 +27,32 @@ Group waiver reports
 <thead>
 <tr>
     <th>Name</th>
-    <th>Reports</th>
     <th>Population</th>
+    <th>Waivers</th>
+    <th>(% of pop)</th>
+    <th>Total waived</th>
+    <th>Avg waiver (%)</th>
     <th>Fee amount</th>
-    <th>Average waiver</th>
-    <th>(% of fee)</th>
-    <th>Number of waivers</th>
-    <th>(% of population)</th>
-    <th>Total waiver amount</th>
+    <th>Reports</th>
+
+
 </tr>
 </thead>
 <tbody>
 {% for fee in groups %}
 <tr class="{% cycle 'row1' 'row2' %}">
-    <th>{{ fee.fee.name }}</th>
-    <td><a href="{% url 'groupreport_private' groupId=fee.fee.pk termName=term.short_name %}">Private</a> /
-    <a href="{% url 'groupreport_public' groupId=fee.fee.pk termName=term.short_name %}">Group JBL</a></td>
+    <th>{{ fee.fee.name|truncatechars:60}}</th>
     <td>{{ fee.fee.get_population_display }}</td>
-    <td>{{ fee.fee.max_amount|currency }}</td>
-    <td>{{ fee.average|currency }}</td>
-    <td>{{ fee.avg_pct|floatformat:1 }}%</td>
     <td>{{ fee.count }}</td>
-    <td>{{ fee.pct|floatformat:1 }}%</td>
+    <td>{{ fee.pct|floatformat:2 }}%</td>
     <td>{{ fee.total|currency }}</td>
-    <td></td>
+    <td>{{ fee.average|currency }} ({{ fee.avg_pct|floatformat:0 }}%)</td>
+    <td>{{ fee.fee.max_amount|currency }}</td>
+    <td><a href="{% url 'groupreport_private' groupId=fee.fee.pk termName=term.short_name %}">Private</a> /
+        <a href="{% url 'groupreport_public' groupId=fee.fee.pk termName=term.short_name %}">Group JBL</a> /
+        <a href="{% url 'groupreport_excel' groupId=fee.fee.pk termName=term.short_name %}">JBL Excel</a>
+</td>
+
 </tr>
 {% endfor %}
 </tbody>
