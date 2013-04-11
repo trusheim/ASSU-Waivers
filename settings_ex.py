@@ -12,8 +12,8 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-STATIC_URL = 'media/'
-ADMIN_MEDIA_PREFIX = 'media/admin/'
+STATIC_URL = '/media/'
+ADMIN_MEDIA_PREFIX = '/media/admin/'
 
 DATABASES = {
     'default': {
