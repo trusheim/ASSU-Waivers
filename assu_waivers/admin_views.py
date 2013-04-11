@@ -10,8 +10,6 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
 from assu_waivers.forms import StudentUploadForm
 from assu_waivers.models import Term, Fee, Enrollment, FeeWaiver, Student
-from assu_waivers.services import PrnText
-
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)

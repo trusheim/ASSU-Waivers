@@ -5,7 +5,7 @@
 Group waiver report: {{ term }}
 {% endblock %}
 {% block reportname %}
-<a href="{% url assu_waivers.admin_views.bygroupTermReport termName=term.short_name %}">Group waiver reports for {{ term }}</a> &rsaquo;
+<a href="{% url 'assu_waivers.admin_views.bygroupTermReport' termName=term.short_name %}">Group waiver reports for {{ term }}</a> &rsaquo;
     Individual group waiver report
 {% endblock %}
 

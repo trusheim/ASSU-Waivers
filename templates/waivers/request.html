@@ -10,7 +10,7 @@
     <div class="color-box ui-state-error bold">An error occurred when submitting your waiver request, and your request has not been processed. Please correct the error below.</div>
     {% endif %}
     
-<form action="{% url assu_waivers.views.request %}" method="POST">
+<form action="{% url 'assu_waivers.views.request' %}" method="POST">
     {% csrf_token %}
     <table class = 'gold-header'>
         <thead>
