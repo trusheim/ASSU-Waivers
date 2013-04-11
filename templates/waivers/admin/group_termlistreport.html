@@ -5,12 +5,12 @@
 Group waiver report: {{ term }}
 {% endblock %}
 {% block reportname %}
-<a href="{% url assu_waivers.admin_views.bygroupTermReport termName=term.short_name %}">Group waiver reports for {{ term }}</a> &rsaquo;
+<a href="{% url 'assu_waivers.admin_views.bygroupTermReport' termName=term.short_name %}">Group waiver reports for {{ term }}</a> &rsaquo;
     Individual group waiver report
 {% endblock %}
 
 {% block content %}
-    <h2>WAIVER REPORT for {{ fee.name }}, {{ term }}</h2>
+    <h2>Waiver report for {{ fee.name }}, {{ term }}</h2>
     <p style='font-style:italic;'>Current as of: {{ date }} </p>
 
     <p><span style="font-weight:bold;">Fee amount:</span> {{ fee.max_amount|currency }}</p>

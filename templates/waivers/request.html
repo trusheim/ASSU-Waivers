@@ -10,19 +10,20 @@
     <div class="color-box ui-state-error bold">An error occurred when submitting your waiver request, and your request has not been processed. Please correct the error below.</div>
     {% endif %}
     
-<form action="{% url assu_waivers.views.request %}" method="POST">
+<form action="{% url 'assu_waivers.views.request' %}" method="POST">
     {% csrf_token %}
     <table class = 'gold-header'>
         <thead>
             <tr>
                 <th style="padding: 1em;">Fee</th>
-                <th>Amount</th>
-                <th>Your waiver</th>
-                <th>Reason</th>
+                <th style="padding: 1em;">Amount</th>
+                <th style="padding: 1em;">Your waiver</th>
+                <th style="padding: 1em;">Reason</th>
             </tr>
         {% for form in forms %}
         <tr>
-        <th {% if form.errors %}class ="ui-state-error"{% else %}class='side-header'{% endif %}>{{ form.fee.name }}</th>
+        <th {% if form.errors %}class ="ui-state-error"{% else %}class='side-header'{% endif %}
+            style = "font-size:110%;">{{ form.fee.name }}</th>
             <th class='side-header'>{{ form.fee.max_amount|currency}}</th>
             <td style="vertical-align:middle;">
                 <span class='bold'>$</span><input type="text" name="{{ form.fee.pk }}-waiver_amount"

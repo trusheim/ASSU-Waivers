@@ -7,7 +7,7 @@ admin.site.login_template = 'webauth/admin_redirect.html'
 
 urlpatterns = patterns('',
     (r'^media/(?P<path>.*)$', 'django.views.static.serve',
-           {'document_root': settings.MEDIA_ROOT}),
+     {'document_root': settings.MEDIA_ROOT}),
     (r'^admin/', include(admin.site.urls)),
     (r'^webauth/', include('webauth.urls')),
     (r'^api/', include('waivers_api.urls')),
