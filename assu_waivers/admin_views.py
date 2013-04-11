@@ -31,10 +31,16 @@ def bygroupTermReport(request, termName):
     total_waiver = [0, 0]
     total_enrollment = [0, 0]
     avg_category_pct = [0.0, 0.0]
-    category_count = [0.00001, 0.00001] # div by 0 errors
+    category_count = [0.000001, 0.000001]  # div by 0 errors
 
-    total_enrollment[0] = Enrollment.objects.filter(term=term, population=0).count() + 1 # + 1 to avoid div errors
-    total_enrollment[1] = Enrollment.objects.filter(term=term, population=1).count() + 1 # + 1 to avoid div errors
+    total_enrollment[0] = Enrollment.objects.filter(term=term, population=0).count()
+    total_enrollment[1] = Enrollment.objects.filter(term=term, population=1).count()
+    if total_enrollment[0] == 0:
+        total_enrollment[0] = 1 # div by zero error fix
+    if total_enrollment[1] == 0:
+        total_enrollment[1] = 1 # div by zero error fix
+
+
 
     for fee in fees:
         total = fee.feewaiver_set.aggregate(Sum('amount'))['amount__sum']
