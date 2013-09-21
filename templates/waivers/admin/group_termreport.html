@@ -14,12 +14,13 @@ Group waiver reports
     <h3>Totals</h3>
     <table>
     <thead>
-    <tr><td>Population</td><td>Total Waived</td><td>Number of Waivers</td><td>(% of population)</td><td>Enrollment</td></tr>
+    <tr><td>Population</td><td>Total Waived</td><td>Number of Waivers</td><td>(% of population)</td>
+        <td>Enrollment</td><td>Possible Waiver</td></tr>
     </thead>
     <tr><td style="font-weight:bold;">Undergraduate</td><td>{{ stats.total_ug|currency }}</td><td>{{ stats.num_waivers_ug }}</td>
-        <td>{{ stats.pct_waivers_ug|floatformat:2 }}%</td><td>{{ stats.enrollment_ug }}</td></tr>
+        <td>{{ stats.pct_waivers_ug|floatformat:2 }}%</td><td>{{ stats.enrollment_ug }}</td><td>{{ stats.fee_ug }}</td></tr>
     <tr><td style="font-weight:bold;">Graduate</td><td>{{ stats.total_grad|currency }}</td><td>{{ stats.num_waivers_grad }}</td>
-        <td>{{ stats.pct_waivers_grad|floatformat:2 }}%</td><td>{{ stats.enrollment_grad }}</td></tr>
+        <td>{{ stats.pct_waivers_grad|floatformat:2 }}%</td><td>{{ stats.enrollment_grad }}</td><td>{{ stats.fee_grad }}</td></tr>
     </table>
 
     <h3>Fee Summaries</h3>

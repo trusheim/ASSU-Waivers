@@ -51,6 +51,7 @@ def getTermStatistics(term):
 
     fees = Fee.objects.filter(term=term)
     total_waiver = [0, 0]
+    total_fee = [0, 0]
     avg_category_pct = [0.0, 0.0]
     category_count = [0.000001, 0.000001]  # div by 0 errors
 
@@ -64,6 +65,9 @@ def getTermStatistics(term):
     fee_info = []
 
     for fee in fees:
+
+        total_fee[fee.population] += fee.max_amount
+
         total = fee.feewaiver_set.aggregate(Sum('amount'))['amount__sum']
         if total is None:
             total = 0
@@ -108,6 +112,9 @@ def getTermStatistics(term):
 
     stats['total_ug'] = total_waiver[0]
     stats['total_grad'] = total_waiver[1]
+
+    stats['fee_ug'] = total_fee[0]
+    stats['fee_g'] = total_fee[1]
 
     stats['fees'] = fee_info
 
