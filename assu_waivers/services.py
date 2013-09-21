@@ -114,7 +114,7 @@ def getTermStatistics(term):
     stats['total_grad'] = total_waiver[1]
 
     stats['fee_ug'] = total_fee[0]
-    stats['fee_g'] = total_fee[1]
+    stats['fee_grad'] = total_fee[1]
 
     stats['fees'] = fee_info
 

@@ -18,9 +18,11 @@ Group waiver reports
         <td>Enrollment</td><td>Possible Waiver</td></tr>
     </thead>
     <tr><td style="font-weight:bold;">Undergraduate</td><td>{{ stats.total_ug|currency }}</td><td>{{ stats.num_waivers_ug }}</td>
-        <td>{{ stats.pct_waivers_ug|floatformat:2 }}%</td><td>{{ stats.enrollment_ug }}</td><td>{{ stats.fee_ug }}</td></tr>
+        <td>{{ stats.pct_waivers_ug|floatformat:2 }}%</td><td>{{ stats.enrollment_ug }}</td>
+        <td>{{ stats.fee_ug | currency }}</td></tr>
     <tr><td style="font-weight:bold;">Graduate</td><td>{{ stats.total_grad|currency }}</td><td>{{ stats.num_waivers_grad }}</td>
-        <td>{{ stats.pct_waivers_grad|floatformat:2 }}%</td><td>{{ stats.enrollment_grad }}</td><td>{{ stats.fee_grad }}</td></tr>
+        <td>{{ stats.pct_waivers_grad|floatformat:2 }}%</td><td>{{ stats.enrollment_grad }}</td>
+        <td>{{ stats.fee_grad | currency }}</td></tr>
     </table>
 
     <h3>Fee Summaries</h3>
