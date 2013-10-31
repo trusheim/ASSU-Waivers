@@ -8,7 +8,7 @@ from django.db.models.aggregates import Sum, Avg
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
-from assu_waivers.forms import StudentUploadForm
+from assu_waivers.forms import StudentUploadForm, AdminWaiverForm
 from assu_waivers.models import Term, Fee, Enrollment, FeeWaiver, Student
 from assu_waivers.exporter import exportTermWaiversToCSV, exportTermWaiversToExcel, exportFeeJBLSummaryToExcel
 from assu_waivers.services import getTermStatistics
@@ -234,6 +234,22 @@ def importStudentCsv(request, termName):
                                   context_instance=RequestContext(request))
     except Exception as e:
         return render_to_response('waivers/admin/upload_done.html', {'error': e},
+                                  context_instance=RequestContext(request))
+
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+def makeFullWaiver(request, termName):
+    term = get_object_or_404(Term, short_name=termName)
+
+    form = AdminWaiverForm()
+
+    if request.method == "POST":
+        form = AdminWaiverForm(request.POST)
+        if form.is_valid():
+            form.save(term)
+            return render_to_response('waivers/admin/waiverdone.html', {'term': term, 'form': form}, context_instance=RequestContext(request))
+
+    return render_to_response('waivers/admin/makewaiver.html', {'term': term, 'form': form},
                                   context_instance=RequestContext(request))
 
 

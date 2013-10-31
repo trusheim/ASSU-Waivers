@@ -16,6 +16,8 @@ Waiver reports
         <td style="border-right:1px solid #ddd">Term</td>
         <td colspan=2 style="border-right:1px solid #ddd">Reports</td>
         <td colspan=2 style="border-right:1px solid #ddd">Export</td>
+        <td style="border-right:1px solid #ddd">Administrative</td>
+
         <td>Import</td>
     </tr></thead>
     {% for term in terms %}
@@ -25,6 +27,7 @@ Waiver reports
         <td style="border-right:1px solid #ddd"><a href="{% url 'assu_waivers.admin_views.bystudentTermReport' termName=term.short_name %}">Per-student report</a></td>
         <td style="border-right:1px solid #ddd"><a href="{% url 'assu_waivers.admin_views.exportTermExcel' termName=term.short_name %}">Excel</a></td>
         <td style="border-right:1px solid #ddd"><a href="{% url 'assu_waivers.admin_views.exportTermCsv' termName=term.short_name %}">CSV</a></td>
+        <td style="border-right:1px solid #ddd"><a href="{% url 'assu_waivers.admin_views.makeFullWaiver' termName=term.short_name %}">Make Waiver</a></td>
         <td><a href="{% url 'assu_waivers.admin_views.importStudentCsv' termName=term.short_name %}">Upload student enrollment information</a></td>
     </tr>
     {% endfor %}

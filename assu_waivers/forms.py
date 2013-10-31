@@ -1,7 +1,7 @@
 from django import forms
 from django.forms.formsets import formset_factory
 from django.forms.models import BaseModelFormSet
-from assu_waivers.models import FeeWaiver, Fee
+from assu_waivers.models import FeeWaiver, Fee, Student, Enrollment
 
 __author__ = 'trusheim'
 
@@ -113,3 +113,62 @@ class WaiverForm(forms.Form):
 class StudentUploadForm(forms.Form):
     csv = forms.FileField(label="Student data CSV")
     athletes = forms.FileField(label="Athlete Exception CSV")
+
+class AdminWaiverForm(forms.Form):
+    sunets = forms.CharField(required=True, widget=forms.Textarea)
+
+    def clean_sunets(self):
+        sunetBlock = str(self.cleaned_data.get('sunets'))
+
+        errors = []
+        sunets = []
+
+        lines = sunetBlock.splitlines()
+        for line in lines:
+            individuals = line.split(',')
+
+            for individual in individuals:
+                individual = individual.lower().strip()
+                individual = individual.replace("@stanford.edu","")
+                if not self.sunet_is_valid_form(individual):
+                    errors.append('%s is not proper form for a SUNetID' % individual)
+                    continue
+
+                try:
+                    record = Student.objects.get(sunetid=individual)
+                except Exception:
+                    errors.append("%s is not recognized as a student in the waivers system for this term" % individual)
+                    continue
+
+                sunets.append(individual)
+            if len(errors) > 0:
+                raise forms.ValidationError(errors)
+        return sunets
+
+    def sunet_is_valid_form(self,sunet):
+        individual = sunet.lower().strip()
+        individual = individual.replace("@stanford.edu","")
+        if not individual.isalnum() or len(individual) > 8:
+            return False
+        return True
+
+    def save(self, term):
+        sunets = self.cleaned_data.get('sunets')
+        print "SAVING %d SUNETS" % len(sunets)
+
+        for sunet in sunets:
+            try:
+                print sunet
+                student = Student.objects.get(sunetid=sunet)
+                print student
+                enrollment = Enrollment.objects.get(term=term, student=student)
+                print enrollment
+                waiveable = Fee.objects.filter(term=term,population=enrollment.population)
+                print "Found %d waivers" % len(waiveable)
+                for fee in waiveable:
+                    waiver = FeeWaiver.objects.get_or_create(student=student, fee=fee, defaults={'amount': 0})[0]
+                    waiver.amount = fee.max_amount
+                    waiver.reason = "Administrative fee waiver"
+                    waiver.save()
+            except Exception:
+                pass

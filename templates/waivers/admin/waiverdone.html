@@ -1,0 +1,14 @@
+{% extends 'waivers/admin/report_base.html' %}
+
+{% block title %}
+Student enrollment upload
+{% endblock %}
+{% block reportname %}
+    Waiver creation: {{ term }}
+{% endblock %}
+
+{% block content %}
+    <h2>Administrative waivers: {{ term }}</h2>
+    <p>Waivers have been created for all provided students. All students were found in the waivers system,
+    and all have been granted waivers of 100% of their fee.</p>
+{% endblock %}

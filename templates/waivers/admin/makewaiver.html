@@ -1,0 +1,26 @@
+{% extends 'waivers/admin/report_base.html' %}
+
+{% block title %}
+Administrative waivers
+{% endblock %}
+{% block reportname %}
+    Waiver creation: {{ term }}
+{% endblock %}
+
+{% block content %}
+    <h2>Administrative waivers: {{ term }}</h2>
+    <p>Enter SUNetIDs (the letters, not the numbers) or email addresses @stanford.edu (assumed to be SUNetIDs)
+        separated by commas or newlines. Administrative waivers will be created that waive 100% of the possible
+    fee for the student.</p>
+    <hr />
+
+    <form method = 'POST' action='{% url 'assu_waivers.admin_views.makeFullWaiver' termName=term.short_name %}' accept-charset="UTF-8">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <p>
+        <span style='font-weight:bold;'>It is a huge pain to undo these, one-by-one. Please be sure you're sure!</span><br />
+        <input type='submit' value='Make administrative waivers' />
+    </p>
+    </form>
+{% endblock %}
